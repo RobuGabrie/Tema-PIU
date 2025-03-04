@@ -9,36 +9,124 @@ namespace ProiectBanca
     static class Program
     {
         [STAThread]
-        static void Main() // Ensure the Main method is static and has the correct signature
+        static void Main()
         {
-            Venit venit1 = new Venit("RON", 1000, DateTime.Now, "Salariu", "Job");
-            Venit venit4 = new Venit("EUR", 1300, DateTime.Now, "Salariu", "Job");
-            Venit venit5 = new Venit("EUR", 1500, DateTime.Now, "Salariu", "Job");
-            Venit venit2 = new Venit("RON", 500, DateTime.Now.AddDays(-1), "Bonus", "Extra");
-            Venit venit3 = new Venit("USD", 200, DateTime.Now.AddDays(-2), "Dividende", "Investitii");
+            AdministrareVenituri administrareVenituri = new AdministrareVenituri();
+            AdministrareCheltuieli administrareCheltuieli = new AdministrareCheltuieli();
 
-            AdministrareCheltuieli adminCheltuieli = new AdministrareCheltuieli();
-            Cheltuiala cheltuiala1 = new Cheltuiala("RON", 100, DateTime.Now, "Mancare", "Alimente");
-            Cheltuiala cheltuiala2 = new Cheltuiala("RON", 50, DateTime.Now.AddDays(-1), "Mancare", "Alimente");
-            Cheltuiala cheltuiala3 = new Cheltuiala("RON", 200, DateTime.Now.AddDays(-2), "Mancare", "Alimente");
-            adminCheltuieli.AdaugaCheltuiala(cheltuiala1);
-            adminCheltuieli.AdaugaCheltuiala(cheltuiala2);
-            adminCheltuieli.AdaugaCheltuiala(cheltuiala3);
-            List<Cheltuiala> cheltuieliZi = adminCheltuieli.GetCheltuieliZi();
-            foreach (Cheltuiala cheltuiala in cheltuieliZi)
+            bool iesire = false;
+            while (!iesire)
             {
-                Console.WriteLine(cheltuiala.Info());
+                Console.WriteLine("Alegeti o optiune:");
+                Console.WriteLine("1. Adauga Venit");
+                Console.WriteLine("2. Vizualizeaza Toate Veniturile");
+                Console.WriteLine("3. Vizualizeaza Veniturile pentru Astazi");
+                Console.WriteLine("4. Vizualizeaza Veniturile pentru Luna aceasta");
+                Console.WriteLine("5. Vizualizeaza Veniturile pentru Anul acesta");
+                Console.WriteLine("6. Vizualizeaza Veniturile dupa Valuta");
+                Console.WriteLine("7. Adauga Cheltuiala");
+                Console.WriteLine("8. Vizualizeaza Toate Cheltuielile");
+                Console.WriteLine("9. Vizualizeaza Cheltuielile pentru Astazi");
+                Console.WriteLine("10. Vizualizeaza Cheltuielile pentru Luna aceasta");
+                Console.WriteLine("11. Vizualizeaza Cheltuielile pentru Anul acesta");
+                Console.WriteLine("0. Iesi");
+                Console.Write("Introduceti alegerea: ");
+                string alegere = Console.ReadLine();
+
+                switch (alegere)
+                {
+                    case "1":
+                        administrareVenituri.AdaugaVenit(administrareVenituri.CitireVenitTastatura());
+                        break;
+                    case "2":
+                        List<Venit> venituri = administrareVenituri.GetToateVenituri();
+                        Console.WriteLine("Venituri: ");
+                        foreach (Venit venit in venituri)
+                        {
+                            Console.WriteLine(venit.Info());
+                        }
+                        break;
+                    case "3":
+                        List<Venit> venituriZi = administrareVenituri.GetVenituriZi();
+                        Console.WriteLine("Venituri pentru astazi: ");
+                        foreach (Venit venit in venituriZi)
+                        {
+                            Console.WriteLine(venit.Info());
+                        }
+                        break;
+                    case "4":
+                        List<Venit> venituriLuna = administrareVenituri.GetVenituriLuna();
+                        Console.WriteLine("Venituri pentru luna aceasta: ");
+                        foreach (Venit venit in venituriLuna)
+                        {
+                            Console.WriteLine(venit.Info());
+                        }
+                        break;
+                    case "5":
+                        List<Venit> venituriAn = administrareVenituri.GetVenituriAn();
+                        Console.WriteLine("Venituri pentru anul acesta: ");
+                        foreach (Venit venit in venituriAn)
+                        {
+                            Console.WriteLine(venit.Info());
+                        }
+                        break;
+                    case "6":
+                        Console.Write("Introduceti valuta: ");
+                        string valuta = Console.ReadLine();
+                        List<Venit> venituriValuta = administrareVenituri.GetVenituriValuta(valuta);
+                        foreach (Venit venit in venituriValuta)
+                        {
+                            Console.WriteLine(venit.Info());
+                        }
+                        break;
+                    case "7":
+                        administrareCheltuieli.AdaugaCheltuiala(administrareCheltuieli.CitireCheltuialaTastatura());
+                        break;
+                    case "8":
+                        List<Cheltuiala> cheltuieli = administrareCheltuieli.GetToateCheltuielile();
+                        Console.WriteLine("Cheltuieli: ");
+                        foreach (Cheltuiala cheltuiala in cheltuieli)
+                        {
+                            Console.WriteLine(cheltuiala.Info());
+                        }
+                        break;
+                    case "9":
+                        List<Cheltuiala> cheltuieliZi = administrareCheltuieli.GetCheltuieliZi();
+                        Console.WriteLine("Cheltuieli pentru astazi: ");
+                        foreach (Cheltuiala cheltuiala in cheltuieliZi)
+                        {
+                            Console.WriteLine(cheltuiala.Info());
+                        }
+                        break;
+                    case "10":
+                        List<Cheltuiala> cheltuieliLuna = administrareCheltuieli.GetCheltuieliLuna();
+                        Console.WriteLine("Cheltuieli pentru luna aceasta: ");
+                        foreach (Cheltuiala cheltuiala in cheltuieliLuna)
+                        {
+                            Console.WriteLine(cheltuiala.Info());
+                        }
+                        break;
+                    case "11":
+                        List<Cheltuiala> cheltuieliAn = administrareCheltuieli.GetCheltuieliAn();
+                        Console.WriteLine("Cheltuieli pentru anul acesta: ");
+                        foreach (Cheltuiala cheltuiala in cheltuieliAn)
+                        {
+                            Console.WriteLine(cheltuiala.Info());
+                        }
+                        break;
+                    case "0":
+                        iesire = true;
+                        break;
+                    default:
+                        Console.WriteLine("Alegere invalida. Incercati din nou.");
+                        break;
+                }
             }
 
-
-
-
-
-
-            // Start the Windows Forms application
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SIGN_IN());
+            // Lansati aplicatia Windows Forms
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new SIGN_IN());
         }
     }
 }
