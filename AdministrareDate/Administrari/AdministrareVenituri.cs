@@ -1,65 +1,131 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Modele.ClaseModele;
 
 namespace AdministrareDate.Administrari
 {
-    public class AdministrareVenituri
+    public class AdministrareVenituri_FisierText
     {
-        private List<Venit> ToateVeniturile = new List<Venit>();
+        private const int NR_MAX_VENITURI = 1000;
+        private string numeFisier;
 
-
-        public List<Venit> GetToateVenituri()
+        public AdministrareVenituri_FisierText(string numeFisier)
         {
-            return ToateVeniturile;
+            this.numeFisier = numeFisier;
+            /* Se încearcă deschiderea fișierului în modul OpenOrCreate
+             astfel încât să fie creat dacă nu există */
+            Stream streamFisierText = File.Open(numeFisier, FileMode.OpenOrCreate);
+            streamFisierText.Close();
         }
-
-        public Venit CitireVenitTastatura()
-        {
-            Console.Write("Introduceti valuta: ");
-            string valuta = Console.ReadLine();
-
-            Console.Write("Introduceti suma: ");
-            double suma = Convert.ToDouble(Console.ReadLine());
-
-            DateTime data = DateTime.Now;
-
-            Console.Write("Introduceti descrierea: ");
-            string descriere = Console.ReadLine();
-
-            Console.Write("Introduceti categoria: ");
-            string categorie = Console.ReadLine();
-
-            return(new Venit(valuta, suma, data, descriere, categorie));
-        }
-
 
         public void AdaugaVenit(Venit venit)
         {
-            if (!ToateVeniturile.Contains(venit))
+            using (StreamWriter streamWriterFisierText = new StreamWriter(numeFisier, true))
             {
-                ToateVeniturile.Add(venit);
+                streamWriterFisierText.WriteLine(venit.ConversieLaSir_PentruFisier());
             }
         }
+
+        public List<Venit> GetToateVeniturile()
+        {
+            List<Venit> venituri = new List<Venit>();
+
+            using (StreamReader streamReader = new StreamReader(numeFisier))
+            {
+                string linieFisier;
+                while ((linieFisier = streamReader.ReadLine()) != null)
+                {
+                    venituri.Add(new Venit(linieFisier));
+                }
+            }
+
+            return venituri;
+        }
+
         public List<Venit> GetVenituriZi()
         {
             DateTime astazi = DateTime.Today;
-            return ToateVeniturile.Where(v => v.DataTranzactie.Date == astazi).ToList();
+            return GetToateVeniturile().Where(v => v.DataTranzactie.Date == astazi).ToList();
         }
+
         public List<Venit> GetVenituriLuna()
         {
             DateTime lunaAstazi = DateTime.Today;
-            return ToateVeniturile.Where(v => v.DataTranzactie.Month == lunaAstazi.Month).ToList();
+            return GetToateVeniturile().Where(v => v.DataTranzactie.Month == lunaAstazi.Month).ToList();
         }
+
         public List<Venit> GetVenituriAn()
         {
             DateTime anAstazi = DateTime.Today;
-            return ToateVeniturile.Where(v => v.DataTranzactie.Year == anAstazi.Year).ToList();
+            return GetToateVeniturile().Where(v => v.DataTranzactie.Year == anAstazi.Year).ToList();
         }
+
         public List<Venit> GetVenituriValuta(string valuta)
         {
-            return ToateVeniturile.Where(v => v.Valuta == valuta).ToList();
+            return GetToateVeniturile().Where(v => v.Valuta == valuta).ToList();
         }
-    }
+        public List<Venit> GetToateVeniturileInValuta(string valutaConversie)
+        {
+            List<Venit> venituri = GetToateVeniturile();
+            List<Venit> venituriInValuta = new List<Venit>();
+
+            foreach (Venit venit in venituri)
+            {
+                double sumaInValuta = venit.Suma; 
+                if (venit.Valuta != valutaConversie)
+                {
+                    sumaInValuta = ConversieValutara(venit.Valuta, valutaConversie, venit.Suma);
+                }
+
+                venituriInValuta.Add(new Venit(valutaConversie, sumaInValuta, venit.DataTranzactie, venit.Descriere, venit.Categorie));
+            }
+
+            return venituriInValuta;
+        }
+
+        private double ConversieValutara(string valutaInitiala, string valutaConversie, double suma)
+        {
+            
+            if (valutaInitiala == "RON" && valutaConversie == "EUR")
+            {
+                return suma / 4.87;
+            }
+            if (valutaInitiala == "RON" && valutaConversie == "USD")
+            {
+                return suma / 4.18;
+            }
+            if (valutaInitiala == "EUR" && valutaConversie == "RON")
+            {
+                return suma * 4.87;
+            }
+            if (valutaInitiala == "EUR" && valutaConversie == "USD")
+            {
+                return suma * 1.12;
+            }
+            if (valutaInitiala == "USD" && valutaConversie == "RON")
+            {
+                return suma * 4.18;
+            }
+            if (valutaInitiala == "USD" && valutaConversie == "EUR")
+            {
+                return suma / 1.12;
+            }
+            if (valutaInitiala == "GBP" && valutaConversie == "RON")
+            {
+                return suma * 5.30;
+            }
+            if (valutaInitiala == "GBP" && valutaConversie == "EUR")
+            {
+                return suma * 1.16; 
+            }
+            if (valutaInitiala == "GBP" && valutaConversie == "USD")
+            {
+                return suma * 1.31; 
+            }
+
+            return suma;
+        }
+        }
 }

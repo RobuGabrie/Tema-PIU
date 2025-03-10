@@ -24,14 +24,27 @@ namespace Modele.ClaseModele
             Descriere = "";
             Categorie = "";
         }
-        //public static List<Venit> GetToateVeniturile()
-        //{
-        //    return ToateVeniturile;
-        //}
-        
-        public override string Info()
+
+        public string ConversieLaSir_PentruFisier()
         {
-            return $"VENIT: {base.Info()},Descriere: {Descriere}, Categorie:{Categorie}";
+            return $"{Valuta};{Suma};{DataTranzactie.ToString("yyyy-MM-dd")};{Descriere};{Categorie}";
+        }
+
+        public Venit(string linieFisier)
+        {
+            string[] componente = linieFisier.Split(';');
+            if (componente.Length == 5) // Verifică dacă avem toate cele 5 componente
+            {
+                Valuta = componente[0];
+                Suma = Convert.ToDouble(componente[1]);
+                DataTranzactie = DateTime.ParseExact(componente[2], "yyyy-MM-dd", null);
+                Descriere = componente[3];
+                Categorie = componente[4];
+            }
+            else
+            {
+                throw new FormatException("Formatul liniei din fișier este incorect.");
+            }
         }
 
     }

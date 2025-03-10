@@ -14,7 +14,7 @@ namespace ProiectBanca.Client
 {
     public partial class Dashboard : UserControl
     {
-        private AdministrareVenituri adminVenituri = new AdministrareVenituri();
+        private AdministrareVenituri_FisierText adminVenituri = new AdministrareVenituri_FisierText("venituri.txt");
 
         public Dashboard()
         {

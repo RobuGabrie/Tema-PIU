@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Modele.ClaseModele
 {
@@ -28,35 +25,6 @@ namespace Modele.ClaseModele
             return $"Valuta: {Valuta}, Suma: {Suma}";
         }
 
-        public double ConversieValutara(string valutaConversie)
-        {
-            if (Valuta == "RON" && valutaConversie == "EUR")
-            {
-                return Suma / 4.87;
-            }
-            if (Valuta == "RON" && valutaConversie == "USD")
-            {
-                return Suma / 4.18;
-            }
-            if (Valuta == "EUR" && valutaConversie == "RON")
-            {
-                return Suma * 4.87;
-            }
-            if (Valuta == "EUR" && valutaConversie == "USD")
-            {
-                return Suma * 1.12;
-            }
-            if (Valuta == "USD" && valutaConversie == "RON")
-            {
-                return Suma * 4.18;
-            }
-            if (Valuta == "USD" && valutaConversie == "EUR")
-            {
-                return Suma / 1.12;
-            }
-            return Suma;
-        }
+     
     }
 }
-
-    
