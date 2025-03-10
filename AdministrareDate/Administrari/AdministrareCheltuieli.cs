@@ -68,7 +68,7 @@ namespace AdministrareDate.Administrari
 
             foreach (Cheltuiala cheltuiala in cheltuieli)
             {
-                double sumaInValuta = cheltuiala.Suma; // Presupunem că suma inițială este în valuta curentă
+                double sumaInValuta = cheltuiala.Suma; 
                 if (cheltuiala.Valuta != valutaConversie)
                 {
                     sumaInValuta = ConversieValutara(cheltuiala.Valuta, valutaConversie, cheltuiala.Suma);

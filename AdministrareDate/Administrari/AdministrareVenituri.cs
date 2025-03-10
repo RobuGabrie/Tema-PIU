@@ -14,8 +14,7 @@ namespace AdministrareDate.Administrari
         public AdministrareVenituri_FisierText(string numeFisier)
         {
             this.numeFisier = numeFisier;
-            /* Se încearcă deschiderea fișierului în modul OpenOrCreate
-             astfel încât să fie creat dacă nu există */
+    
             Stream streamFisierText = File.Open(numeFisier, FileMode.OpenOrCreate);
             streamFisierText.Close();
         }

@@ -96,8 +96,8 @@ static class Program
 
 
 
-        Application.EnableVisualStyles();
-        Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new SIGN_IN());
+        //Application.EnableVisualStyles();
+        //Application.SetCompatibleTextRenderingDefault(false);
+        //Application.Run(new SIGN_IN());
     }
 }
