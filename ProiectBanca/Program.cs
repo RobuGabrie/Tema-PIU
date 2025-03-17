@@ -11,93 +11,86 @@ static class Program
         AdministrareVenituri_FisierText administrareVenituri = new AdministrareVenituri_FisierText("venituri.txt");
         AdministrareCheltuieli_FisierText administrareCheltuieli = new AdministrareCheltuieli_FisierText("cheltuieli.txt");
 
-        Console.WriteLine("Toate Veniturile:");
-        List<Venit> venituri = administrareVenituri.GetToateVeniturile();
-        foreach (Venit v in venituri)
+        bool rulare = true;
+        while (rulare)
         {
-            Console.WriteLine(v.ConversieLaSir_PentruFisier());
+            Console.Clear();
+            Console.WriteLine("===== MENIU =====");
+            Console.WriteLine("1. Afisare toate veniturile");
+            Console.WriteLine("2. Afisare venituri in ordine alfabetica");
+            Console.WriteLine("3. Iesire");
+            Console.Write("\nAlegeti o optiune: ");
+
+            string optiune = Console.ReadLine();
+
+            switch (optiune)
+            {
+                case "1":
+                    AfiseazaVenituri(administrareVenituri.GetToateVeniturile(), "Toate Veniturile");
+                    break;
+                case "2":
+                    List<Venit>[] venituriOrdine = administrareVenituri.GetVenituriOrdine();
+
+                    for (int i = 0; i < venituriOrdine.Length; i++)
+                    {
+                        char litera = (char)('a' + i);
+                        Console.WriteLine($"Venituri care incep cu litera '{litera}' ");
+
+                        if (venituriOrdine[i].Count > 0)
+                        {
+                            foreach (Venit v in venituriOrdine[i])
+                            {
+                                Console.WriteLine(v.ConversieLaSir_PentruFisier());
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nu exista venituri pentru aceasta litera.");
+                        }
+
+                        Console.WriteLine(new string('-', 50));
+                    }
+                    Console.ReadKey();
+
+                    break;
+                case "3":
+                    rulare = false;
+                    break;
+                default:
+                    Console.WriteLine("Optiune invalida. Apasati orice tasta pentru a continua...");
+                    Console.ReadKey();
+                    break;
+            }
         }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Venituri din Ziua Curentă:");
-        List<Venit> venituriZi = administrareVenituri.GetVenituriZi();
-        foreach (Venit v in venituriZi)
-        {
-            Console.WriteLine(v.ConversieLaSir_PentruFisier());
-        }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Venituri din Luna Curentă:");
-        List<Venit> venituriLuna = administrareVenituri.GetVenituriLuna();
-        foreach (Venit v in venituriLuna)
-        {
-            Console.WriteLine(v.ConversieLaSir_PentruFisier());
-        }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Venituri din Anul Curent:");
-        List<Venit> venituriAn = administrareVenituri.GetVenituriAn();
-        foreach (Venit v in venituriAn)
-        {
-            Console.WriteLine(v.ConversieLaSir_PentruFisier());
-        }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Toate Cheltuielile:");
-        List<Cheltuiala> cheltuieli = administrareCheltuieli.GetToateCheltuielile();
-        foreach (Cheltuiala c in cheltuieli)
-        {
-            Console.WriteLine(c.ConversieLaSir_PentruFisier());
-        }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Cheltuieli din Ziua Curentă:");
-        List<Cheltuiala> cheltuieliZi = administrareCheltuieli.GetCheltuieliZi();
-        foreach (Cheltuiala c in cheltuieliZi)
-        {
-            Console.WriteLine(c.ConversieLaSir_PentruFisier());
-        }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Cheltuieli din Luna Curentă:");
-        List<Cheltuiala> cheltuieliLuna = administrareCheltuieli.GetCheltuieliLuna();
-        foreach (Cheltuiala c in cheltuieliLuna)
-        {
-            Console.WriteLine(c.ConversieLaSir_PentruFisier());
-        }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Cheltuieli din Anul Curent:");
-        List<Cheltuiala> cheltuieliAn = administrareCheltuieli.GetCheltuieliAn();
-        foreach (Cheltuiala c in cheltuieliAn)
-        {
-            Console.WriteLine(c.ConversieLaSir_PentruFisier());
-        }
-        Console.WriteLine(new string('-', 50));
-
-  
-   
-  
-
-        Console.WriteLine("Venituri în EUR:");
-        List<Venit> venituriInEUR = administrareVenituri.GetToateVeniturileInValuta("EUR");
-        foreach (Venit v in venituriInEUR)
-        {
-            Console.WriteLine($"{v.ConversieLaSir_PentruFisier()}");
-        }
-        Console.WriteLine(new string('-', 50));
-
-        Console.WriteLine("Cheltuieli în EUR:");
-        List<Cheltuiala> cheltuieliInEUR = administrareCheltuieli.GetToateCheltuielileInValuta("EUR");
-        foreach (Cheltuiala c in cheltuieliInEUR)
-        {
-            Console.WriteLine($"{c.ConversieLaSir_PentruFisier()}");
-        }
-
-
-
-        //Application.EnableVisualStyles();
-        //Application.SetCompatibleTextRenderingDefault(false);
-        //Application.Run(new SIGN_IN());
     }
+
+    private static void AfiseazaVenituri(List<Venit> venituri, string titlu)
+    {
+        Console.Clear();
+        Console.WriteLine($"===== {titlu} =====");
+
+        if (venituri.Count == 0)
+        {
+            Console.WriteLine("Nu exista inregistrari.");
+        }
+        else
+        {
+            foreach (Venit v in venituri)
+            {
+                Console.WriteLine(v.ConversieLaSir_PentruFisier());
+            }
+        }
+
+        Console.WriteLine(new string('-', 50));
+        Console.ReadKey();
+    }
+
+
+
+
+
+    //Application.EnableVisualStyles();
+    //Application.SetCompatibleTextRenderingDefault(false);
+    //Application.Run(new SIGN_IN());
 }
+

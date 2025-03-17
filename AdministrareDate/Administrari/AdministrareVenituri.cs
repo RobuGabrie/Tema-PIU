@@ -14,7 +14,7 @@ namespace AdministrareDate.Administrari
         public AdministrareVenituri_FisierText(string numeFisier)
         {
             this.numeFisier = numeFisier;
-    
+
             Stream streamFisierText = File.Open(numeFisier, FileMode.OpenOrCreate);
             streamFisierText.Close();
         }
@@ -72,7 +72,7 @@ namespace AdministrareDate.Administrari
 
             foreach (Venit venit in venituri)
             {
-                double sumaInValuta = venit.Suma; 
+                double sumaInValuta = venit.Suma;
                 if (venit.Valuta != valutaConversie)
                 {
                     sumaInValuta = ConversieValutara(venit.Valuta, valutaConversie, venit.Suma);
@@ -86,7 +86,7 @@ namespace AdministrareDate.Administrari
 
         private double ConversieValutara(string valutaInitiala, string valutaConversie, double suma)
         {
-            
+
             if (valutaInitiala == "RON" && valutaConversie == "EUR")
             {
                 return suma / 4.87;
@@ -117,14 +117,49 @@ namespace AdministrareDate.Administrari
             }
             if (valutaInitiala == "GBP" && valutaConversie == "EUR")
             {
-                return suma * 1.16; 
+                return suma * 1.16;
             }
             if (valutaInitiala == "GBP" && valutaConversie == "USD")
             {
-                return suma * 1.31; 
+                return suma * 1.31;
             }
 
             return suma;
         }
+
+        public List<Venit>[] GetVenituriOrdine()
+        { 
+            List<Venit> venituri = GetToateVeniturile();
+            List<Venit>[] venituriGrupate = new List<Venit>[26];
+            for (int i = 0; i < 26; i++)
+            {
+                venituriGrupate[i] = new List<Venit>();
+            }
+            foreach (Venit v in venituri)
+            {
+                int litera = v.Descriere[0] - 'A';
+                if (litera >= 0 && litera < 26)
+                {
+                    venituriGrupate[litera].Add(v);
+                }
+
+            }
+
+            //List<Venit> venituriOrdonate = new List<Venit>();
+            //for (int i = 0; i < 26; i++)
+            //{
+            //    venituriGrupate[i] = venituriGrupate[i].OrderBy(v => v.Descriere).ToList();
+            //    venituriOrdonate.AddRange(venituriGrupate[i]);
+            //}
+            //using (StreamWriter streamWriter = new StreamWriter(numeFisier, false))
+            //{
+            //    foreach (Venit v in venituriOrdonate)
+            //    {
+            //        streamWriter.WriteLine(v.ConversieLaSir_PentruFisier());
+            //    }
+            //}
+            return venituriGrupate;
         }
+        
 }
+    }
