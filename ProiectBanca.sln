@@ -8,11 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProiectBanca", "ProiectBanc
 		{EE7A392B-24E3-4F44-BAF4-A9A81390527A} = {EE7A392B-24E3-4F44-BAF4-A9A81390527A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdministrareDate", "AdministrareDate\AdministrareDate.csproj", "{5ED1EADC-485A-490B-B3D6-A6A7F0A095E4}"	ProjectSection(ProjectDependencies) = postProject
-		{EE7A392B-24E3-4F44-BAF4-A9A81390527A} = {EE7A392B-24E3-4F44-BAF4-A9A81390527A}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdministrareDate", "AdministrareDate\AdministrareDate.csproj", "{5ED1EADC-485A-490B-B3D6-A6A7F0A095E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modele", "Modele\Modele.csproj", "{EE7A392B-24E3-4F44-BAF4-A9A81390527A}"EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modele", "Modele\Modele.csproj", "{EE7A392B-24E3-4F44-BAF4-A9A81390527A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

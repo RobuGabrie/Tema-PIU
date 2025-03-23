@@ -6,16 +6,21 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Modele.ClaseModele;
 using ProiectBanca.Client;
 
 
 namespace ProiectBanca
 {
+   
     public partial class MAIN : Form
     {
-        public MAIN()
+        private AdminUser adminUser;
+
+        public MAIN(AdminUser user)
         {
             InitializeComponent();
+            adminUser = user;
         }
 
         private void MAIN_Load(object sender, EventArgs e)

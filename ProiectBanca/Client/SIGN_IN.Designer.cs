@@ -33,6 +33,7 @@
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
+            pictureBox1 = new PictureBox();
             label4 = new Label();
             label5 = new Label();
             textBox1 = new TextBox();
@@ -40,7 +41,7 @@
             textBox2 = new TextBox();
             button1 = new Button();
             checkBox1 = new CheckBox();
-            pictureBox1 = new PictureBox();
+            linkLabel1 = new LinkLabel();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -90,6 +91,16 @@
             label1.Text = "Management tranzactii";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             label1.Click += label1_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(82, 104);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(165, 157);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
             // 
             // label4
             // 
@@ -166,15 +177,17 @@
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
-            // pictureBox1
+            // linkLabel1
             // 
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(82, 104);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(165, 157);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.TabIndex = 0;
-            pictureBox1.TabStop = false;
+            linkLabel1.AutoSize = true;
+            linkLabel1.Cursor = Cursors.Hand;
+            linkLabel1.Font = new Font("Bahnschrift SemiLight SemiConde", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            linkLabel1.Location = new Point(119, 373);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(78, 21);
+            linkLabel1.TabIndex = 9;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "linkLabel2";
             // 
             // SIGN_IN
             // 
@@ -182,6 +195,7 @@
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.White;
             ClientSize = new Size(618, 529);
+            Controls.Add(linkLabel1);
             Controls.Add(checkBox1);
             Controls.Add(button1);
             Controls.Add(textBox2);
@@ -218,5 +232,7 @@
         private Button button1;
         private CheckBox checkBox1;
         private PictureBox pictureBox1;
+        private LinkLabel linkLabel1;
     }
+
 }
