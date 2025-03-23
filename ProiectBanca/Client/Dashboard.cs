@@ -7,32 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AdministrareDate.Administrari;
+
 using Modele.ClaseModele;
 
 namespace ProiectBanca.Client
 {
     public partial class Dashboard : UserControl
     {
-        private AdministrareVenituri_FisierText adminVenituri = new AdministrareVenituri_FisierText("venituri.txt");
+        
 
         public Dashboard()
         {
             InitializeComponent();
-            UpdateVenitAzi();
+      
         }
 
-        private void UpdateVenitAzi()
-        {
-            List<Venit> venituri = adminVenituri.GetVenituriZi();
-            double totalVenituri = 0;
-            foreach (Venit venit in venituri)
-            {
-                totalVenituri += venit.Suma;
-            }
-            VenitAzi.Text = totalVenituri.ToString() + "RON";
-
-        }
+   
 
         private void Dashboard_Load(object sender, EventArgs e)
         {

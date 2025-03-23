@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Modele.ClaseModele
 {
+    public enum TipTranzactie
+    {
+        Venit,
+        Cheltuiala
+    }
+
     public class Tranzactie : Bani
     {
+        public int Id { get; set; }  
         public DateTime DataTranzactie { get; set; }
+        public int UserId { get; set; }
+        public TipTranzactie Tip { get; set; }
 
-        private static int nextId = 1;
-        public int Id { get; private set; }
-
-        public Tranzactie(string valuta, double suma, DateTime dataTranzactie) : base(valuta, suma) 
+        public Tranzactie(string valuta, double suma, DateTime dataTranzactie, int userId, TipTranzactie tip) : base(valuta, suma)
         {
+            Id = 0;  
             DataTranzactie = dataTranzactie;
-            Id  = nextId++;
-        }
-        public Tranzactie()
-        {
-            DataTranzactie = DateTime.Now;
-            Id = nextId++;
+            UserId = userId;
+            Tip = tip;
         }
 
-        public override string Info()
+        public override string ToString()
         {
-            return $"Id: {Id}, {base.Info()}, Data tranzactie: {DataTranzactie}";
+            return $"Id: {Id}, {base.ToString()}, Tip: {Tip}, Data tranzactie: {DataTranzactie}, UserId: {UserId}";
         }
     }
 }

@@ -14,17 +14,11 @@ namespace Modele.ClaseModele
             Suma = suma;
         }
 
-        public Bani()
-        {
-            Valuta = "NEDEFINITA";
-            Suma = 0;
-        }
+        public Bani() : this("NEDEFINITA", 0) { }
 
-        public virtual string Info()
+        public override string ToString()
         {
             return $"Valuta: {Valuta}, Suma: {Suma}";
         }
-
-     
     }
 }
