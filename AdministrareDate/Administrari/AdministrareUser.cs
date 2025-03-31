@@ -9,7 +9,7 @@ namespace Modele.ClaseModele
     public class AdminUser
     {
         private static readonly string filePath = "useri.json";
-        private User? userCurent;
+        public static User? userCurent { get; private set; }
 
         public AdminUser()
         {
@@ -17,15 +17,7 @@ namespace Modele.ClaseModele
         }
 
      
-        public User GetUserCurent()
-        {
-            if (userCurent == null)
-            {
-                throw new Exception("Nu există utilizator curent.");
-            }
-            return userCurent;
-        }
-
+      
       
         public bool EsteAutentificat()
         {
@@ -53,7 +45,7 @@ namespace Modele.ClaseModele
 
             return true;
         }
-      
+
         public bool Autentificare(string email, string parola)
         {
             List<User> useri = AdaugaUseri();
@@ -63,11 +55,16 @@ namespace Modele.ClaseModele
 
             if (user != null)
             {
-                userCurent = user;
+                userCurent = user; 
                 return true;
             }
 
             return false;
+        }
+
+        public User? GetUserCurent()
+        {
+            return userCurent; 
         }
 
         public void Deconectare()

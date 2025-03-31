@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Modele.ClaseModele
 {
@@ -102,6 +103,18 @@ namespace Modele.ClaseModele
             List<Tranzactie> tranzactii = IncarcaTranzactii();
             return tranzactii.Where(t => t.UserId == userId && t.Tip == TipTranzactie.Cheltuiala)
                              .Sum(t => t.Suma);
+
+        }
+        public double SchimbValutar(double suma, string valutaSursa, string valutaDestinatie)
+        {
+            Dictionary<string, double> rateValutare = RateValutare.Rate;
+            if (!rateValutare.ContainsKey(valutaSursa) || !rateValutare.ContainsKey(valutaDestinatie))
+            {
+                throw new ArgumentException("Valuta specificată nu este suportată.");
+            }
+
+            double rataConversie = rateValutare[valutaDestinatie] / rateValutare[valutaSursa];
+            return Math.Round(suma * rataConversie, 2);
         }
 
         private List<Tranzactie> IncarcaTranzactii()
@@ -109,16 +122,44 @@ namespace Modele.ClaseModele
             if (File.Exists(filePath))
             {
                 string jsonString = File.ReadAllText(filePath);
-                return JsonSerializer.Deserialize<List<Tranzactie>>(jsonString) ?? new List<Tranzactie>();
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new JsonStringEnumConverter());
+                return JsonSerializer.Deserialize<List<Tranzactie>>(jsonString, options) ?? new List<Tranzactie>();
             }
             return new List<Tranzactie>();
         }
 
-        // Salvează lista de tranzacții în fișier
+
+
         private void SalveazaTranzactii(List<Tranzactie> tranzactii)
         {
             string jsonString = JsonSerializer.Serialize(tranzactii, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(filePath, jsonString);
         }
+        public Dictionary<Valuta, List<Tranzactie>> GetTranzactiiGrupatePerValuta(int userId)
+        {
+            List<Tranzactie> tranzactii = IncarcaTranzactii();
+
+            List<Tranzactie> tranzactiiUtilizator = tranzactii.Where(t => t.UserId == userId).ToList();
+
+            Dictionary<Valuta, List<Tranzactie>> tranzactiiPerValuta = new Dictionary<Valuta, List<Tranzactie>>();
+
+            foreach (Tranzactie tranzactie in tranzactiiUtilizator)
+            {
+                Valuta valutaTranzactie = tranzactie.Valuta;
+
+                if (!tranzactiiPerValuta.ContainsKey(valutaTranzactie))
+                {
+                    tranzactiiPerValuta[valutaTranzactie] = new List<Tranzactie>();
+                }
+
+                tranzactiiPerValuta[valutaTranzactie].Add(tranzactie);
+            }
+
+            return tranzactiiPerValuta;
+        }
+
+
+
     }
 }

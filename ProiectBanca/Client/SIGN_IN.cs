@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Forms;
 using Modele.ClaseModele;
 
@@ -55,7 +55,6 @@ namespace ProiectBanca
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
             string username = textBox1.Text.Trim();
             string password = textBox2.Text.Trim();
 
@@ -67,7 +66,6 @@ namespace ProiectBanca
 
             if (isRegisterMode)
             {
-                
                 if (adminUser.Inregistrare(username, username + "@example.com", password))
                 {
                     MessageBox.Show("Inregistrare reusita! Acum va puteti autentifica.", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -82,12 +80,20 @@ namespace ProiectBanca
             {
                 if (adminUser.Autentificare(username + "@example.com", password))
                 {
-                    MessageBox.Show("Autentificare reusita!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    User currentUser = adminUser.GetUserCurent();
+                    if (currentUser != null)
+                    {
+                        MessageBox.Show($"Autentificare reusita! Bun venit, {currentUser.Nume}.", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-           
-                    MAIN mainForm = new MAIN(adminUser);
-                    mainForm.Show();
-                    this.Hide();
+                        // Transmite instanța de AdminUser către MAIN
+                        MAIN mainForm = new MAIN(adminUser);
+                        mainForm.Show();
+                        this.Hide();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Autentificare reusita, dar utilizatorul curent nu a fost setat corect.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
                 else
                 {
@@ -96,7 +102,10 @@ namespace ProiectBanca
             }
         }
 
-      
+
+
+
+
         private void SetLoginMode()
         {
             isRegisterMode = false;

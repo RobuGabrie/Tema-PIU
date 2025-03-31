@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using Modele.ClaseModele;
+using ProiectBanca;
 
 namespace ProiectBanca
 {
@@ -35,6 +37,7 @@ namespace ProiectBanca
             label1 = new Label();
             saveFileDialog1 = new SaveFileDialog();
             panel1 = new Panel();
+            panel2 = new Panel();
             pictureBox1 = new PictureBox();
             pictureBox6 = new PictureBox();
             button3 = new Button();
@@ -42,17 +45,23 @@ namespace ProiectBanca
             button2 = new Button();
             pictureBox4 = new PictureBox();
             button1 = new Button();
-            pictureBox3 = new PictureBox();
             label5 = new Label();
-            DASHBOARD = new Button();
             imageList1 = new ImageList(components);
-            dashboard1 = new ProiectBanca.Client.Dashboard();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            panel3 = new Panel();
+            panel4 = new Panel();
+            Totalv = new Label();
+            Totalc = new Label();
+            venituri = new Label();
+            cheltuieli = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
+            panel3.SuspendLayout();
+            panel4.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -62,11 +71,11 @@ namespace ProiectBanca
             label1.Name = "label1";
             label1.Size = new Size(0, 21);
             label1.TabIndex = 1;
-            label1.Click += label1_Click;
             // 
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(101, 96, 184);
+            panel1.Controls.Add(panel2);
             panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(pictureBox6);
             panel1.Controls.Add(button3);
@@ -74,15 +83,19 @@ namespace ProiectBanca
             panel1.Controls.Add(button2);
             panel1.Controls.Add(pictureBox4);
             panel1.Controls.Add(button1);
-            panel1.Controls.Add(pictureBox3);
             panel1.Controls.Add(label5);
-            panel1.Controls.Add(DASHBOARD);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(250, 653);
             panel1.TabIndex = 2;
-            panel1.Paint += panel1_Paint;
+            // 
+            // panel2
+            // 
+            panel2.Location = new Point(241, 0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(901, 653);
+            panel2.TabIndex = 4;
             // 
             // pictureBox1
             // 
@@ -94,7 +107,6 @@ namespace ProiectBanca
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 14;
             pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click_2;
             // 
             // pictureBox6
             // 
@@ -132,7 +144,6 @@ namespace ProiectBanca
             pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox5.TabIndex = 11;
             pictureBox5.TabStop = false;
-            pictureBox5.Click += pictureBox5_Click;
             // 
             // button2
             // 
@@ -159,7 +170,6 @@ namespace ProiectBanca
             pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox4.TabIndex = 9;
             pictureBox4.TabStop = false;
-            pictureBox4.Click += pictureBox4_Click;
             // 
             // button1
             // 
@@ -176,18 +186,6 @@ namespace ProiectBanca
             button1.TextAlign = ContentAlignment.MiddleRight;
             button1.UseVisualStyleBackColor = false;
             // 
-            // pictureBox3
-            // 
-            pictureBox3.BackColor = Color.White;
-            pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(17, 100);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(35, 37);
-            pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox3.TabIndex = 7;
-            pictureBox3.TabStop = false;
-            pictureBox3.Click += pictureBox3_Click;
-            // 
             // label5
             // 
             label5.AutoSize = true;
@@ -198,23 +196,6 @@ namespace ProiectBanca
             label5.Size = new Size(72, 34);
             label5.TabIndex = 7;
             label5.Text = "ADMIN";
-            label5.Click += label5_Click;
-            // 
-            // DASHBOARD
-            // 
-            DASHBOARD.BackColor = Color.White;
-            DASHBOARD.FlatAppearance.BorderSize = 0;
-            DASHBOARD.FlatStyle = FlatStyle.Flat;
-            DASHBOARD.Font = new Font("Bahnschrift SemiBold Condensed", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DASHBOARD.ForeColor = Color.FromArgb(101, 96, 254);
-            DASHBOARD.Location = new Point(13, 95);
-            DASHBOARD.Name = "DASHBOARD";
-            DASHBOARD.Size = new Size(222, 47);
-            DASHBOARD.TabIndex = 5;
-            DASHBOARD.Text = "Panou de control";
-            DASHBOARD.TextAlign = ContentAlignment.MiddleRight;
-            DASHBOARD.UseVisualStyleBackColor = false;
-            DASHBOARD.Click += DASHBOARD_Click;
             // 
             // imageList1
             // 
@@ -222,19 +203,88 @@ namespace ProiectBanca
             imageList1.ImageSize = new Size(16, 16);
             imageList1.TransparentColor = Color.Transparent;
             // 
-            // dashboard1
+            // tableLayoutPanel1
             // 
-            dashboard1.Location = new Point(250, 0);
-            dashboard1.Name = "dashboard1";
-            dashboard1.Size = new Size(900, 650);
-            dashboard1.TabIndex = 3;
-            dashboard1.Load += dashboard1_Load;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(panel4, 1, 0);
+            tableLayoutPanel1.Controls.Add(panel3, 0, 0);
+            tableLayoutPanel1.Location = new Point(256, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(883, 647);
+            tableLayoutPanel1.TabIndex = 3;
+            // 
+            // panel3
+            // 
+            panel3.BackColor = Color.FromArgb(101, 96, 184);
+            panel3.Controls.Add(venituri);
+            panel3.Controls.Add(Totalv);
+            panel3.Location = new Point(3, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(435, 317);
+            panel3.TabIndex = 0;
+            // 
+            // panel4
+            // 
+            panel4.BackColor = Color.FromArgb(101, 96, 184);
+            panel4.Controls.Add(cheltuieli);
+            panel4.Controls.Add(Totalc);
+            panel4.Location = new Point(444, 3);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(435, 317);
+            panel4.TabIndex = 1;
+            // 
+            // Totalv
+            // 
+            Totalv.Font = new Font("Bahnschrift Condensed", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Totalv.ForeColor = Color.White;
+            Totalv.Location = new Point(22, 44);
+            Totalv.Name = "Totalv";
+            Totalv.Size = new Size(221, 43);
+            Totalv.TabIndex = 0;
+            Totalv.Text = "Total Venituri";
+ 
+            // 
+            // Totalc
+            // 
+            Totalc.Font = new Font("Bahnschrift Condensed", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Totalc.ForeColor = Color.White;
+            Totalc.Location = new Point(37, 44);
+            Totalc.Name = "Totalc";
+            Totalc.Size = new Size(221, 43);
+            Totalc.TabIndex = 1;
+            Totalc.Text = "Total Cheltuieli";
+            // 
+            // venituri
+            // 
+            venituri.Font = new Font("Bahnschrift Condensed", 28.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            venituri.ForeColor = Color.White;
+            venituri.Location = new Point(109, 140);
+            venituri.Name = "venituri";
+            venituri.Size = new Size(248, 71);
+            venituri.TabIndex = 1;
+            venituri.Text = "0";
+        
+            // 
+            // cheltuieli
+            // 
+            cheltuieli.Font = new Font("Bahnschrift Condensed", 28.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cheltuieli.ForeColor = Color.White;
+            cheltuieli.Location = new Point(127, 140);
+            cheltuieli.Name = "cheltuieli";
+            cheltuieli.Size = new Size(246, 81);
+            cheltuieli.TabIndex = 2;
+            cheltuieli.Text = "0";
             // 
             // MAIN
             // 
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(1142, 653);
-            Controls.Add(dashboard1);
+            Controls.Add(tableLayoutPanel1);
             Controls.Add(panel1);
             Controls.Add(label1);
             Font = new Font("Bahnschrift Condensed", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -249,7 +299,9 @@ namespace ProiectBanca
             ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel4.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -260,8 +312,6 @@ namespace ProiectBanca
         private Panel panel1;
         private ImageList imageList1;
         private Label label5;
-        private Button DASHBOARD;
-        private PictureBox pictureBox3;
         private PictureBox pictureBox6;
         private Button button3;
         private PictureBox pictureBox5;
@@ -269,6 +319,14 @@ namespace ProiectBanca
         private PictureBox pictureBox4;
         private Button button1;
         private PictureBox pictureBox1;
-        private Client.Dashboard dashboard1;
+
+        private Panel panel2;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel panel4;
+        private Panel panel3;
+        private Label Totalv;
+        private Label cheltuieli;
+        private Label Totalc;
+        private Label venituri;
     }
 }
