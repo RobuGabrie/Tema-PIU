@@ -77,11 +77,11 @@ namespace Modele.ClaseModele
         public bool StergeTranzactie(int tranzactieId)
         {
             List<Tranzactie> tranzactii = IncarcaTranzactii();
-            Tranzactie? tranzactie = tranzactii.FirstOrDefault(t => t.Id == tranzactieId);
+            int index = tranzactii.FindIndex(t => t.Id == tranzactieId);
 
-            if (tranzactie != null)
+            if (index != -1)
             {
-                tranzactii.Remove(tranzactie);
+                tranzactii.RemoveAt(index);
                 SalveazaTranzactii(tranzactii);
                 return true;
             }
@@ -93,28 +93,44 @@ namespace Modele.ClaseModele
         public double CalculeazaTotalVenituri(int userId)
         {
             List<Tranzactie> tranzactii = IncarcaTranzactii();
-            return tranzactii.Where(t => t.UserId == userId && t.Tip == TipTranzactie.Venit)
-                             .Sum(t => t.Suma);
+            double total = 0;
+            
+            foreach (var tranzactie in tranzactii.Where(t => t.UserId == userId && t.Tip == TipTranzactie.Venit))
+            {
+                // Convertește suma în RON folosind metoda SchimbValutar
+                double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
+                total += sumaInRON;
+            }
+            
+            return Math.Round(total, 2);
         }
 
 
         public double CalculeazaTotalCheltuieli(int userId)
         {
             List<Tranzactie> tranzactii = IncarcaTranzactii();
-            return tranzactii.Where(t => t.UserId == userId && t.Tip == TipTranzactie.Cheltuiala)
-                             .Sum(t => t.Suma);
+            double total = 0;
+            
+            foreach (var tranzactie in tranzactii.Where(t => t.UserId == userId && t.Tip == TipTranzactie.Cheltuiala))
+            {
+                // Convertește suma în RON folosind metoda SchimbValutar
+                double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
+                total += sumaInRON;
+            }
+            
+            return Math.Round(total, 2);
 
         }
         public double SchimbValutar(double suma, string valutaSursa, string valutaDestinatie)
         {
             Dictionary<string, double> rateValutare = RateValutare.Rate;
-            if (!rateValutare.ContainsKey(valutaSursa) || !rateValutare.ContainsKey(valutaDestinatie))
-            {
-                throw new ArgumentException("Valuta specificată nu este suportată.");
-            }
+        
 
-            double rataConversie = rateValutare[valutaDestinatie] / rateValutare[valutaSursa];
-            return Math.Round(suma * rataConversie, 2);
+           
+            double sumaInRON = suma * rateValutare[valutaSursa]; 
+            double result = sumaInRON / rateValutare[valutaDestinatie]; 
+            
+            return Math.Round(result, 2);
         }
 
         private List<Tranzactie> IncarcaTranzactii()
@@ -159,7 +175,68 @@ namespace Modele.ClaseModele
             return tranzactiiPerValuta;
         }
 
+        public double CalculeazaVenituriLunare(int userId)
+        {
+            double total = 0;
+            var tranzactiiLunare = GetTranzactiiUtilizatorDupaTip(userId, TipTranzactie.Venit)
+                                  .Where(t => t.DataTranzactie.Month == DateTime.Now.Month);
+            
+            foreach (var tranzactie in tranzactiiLunare)
+            {
+                // Convertește suma în RON
+                double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
+                total += sumaInRON;
+            }
+            
+            return Math.Round(total, 2);
+        }
 
+        public double CalculeazaVenituriZilnice(int userId)
+        {
+            double total = 0;
+            var tranzactiiZilnice = GetTranzactiiUtilizatorDupaTip(userId, TipTranzactie.Venit)
+                                   .Where(t => t.DataTranzactie.Date == DateTime.Now.Date);
+            
+            foreach (var tranzactie in tranzactiiZilnice)
+            {
+                // Convertește suma în RON
+                double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
+                total += sumaInRON;
+            }
+            
+            return Math.Round(total, 2);
+        }
 
+        public double CalculeazaCheltuieliLunare(int userId)
+        {
+            double total = 0;
+            var tranzactiiLunare = GetTranzactiiUtilizatorDupaTip(userId, TipTranzactie.Cheltuiala)
+                                  .Where(t => t.DataTranzactie.Month == DateTime.Now.Month);
+            
+            foreach (var tranzactie in tranzactiiLunare)
+            {
+                // Convertește suma în RON
+                double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
+                total += sumaInRON;
+            }
+            
+            return Math.Round(total, 2);
+        }
+
+        public double CalculeazaCheltuieliZilnice(int userId)
+        {
+            double total = 0;
+            var tranzactiiZilnice = GetTranzactiiUtilizatorDupaTip(userId, TipTranzactie.Cheltuiala)
+                                   .Where(t => t.DataTranzactie.Date == DateTime.Now.Date);
+            
+            foreach (var tranzactie in tranzactiiZilnice)
+            {
+                // Convertește suma în RON
+                double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
+                total += sumaInRON;
+            }
+            
+            return Math.Round(total, 2);
+        }
     }
 }
