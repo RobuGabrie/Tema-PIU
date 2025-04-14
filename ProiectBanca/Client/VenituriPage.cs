@@ -17,11 +17,19 @@ namespace ProiectBanca
         private Label titleLabel;
         private Panel searchPanel;
         private TextBox searchTextBox;
+        private ComboBox searchFieldComboBox;
         private Button searchButton;
         private Button addButton;
         private Panel listViewPanel;
         private ListView venituriListView;
         private Dictionary<int, Button> deleteButtons = new Dictionary<int, Button>();
+
+        // Noi controale pentru căutare
+        private RadioButton idRadioButton;
+        private RadioButton dataRadioButton;
+        private RadioButton sumaRadioButton;
+        private RadioButton valutaRadioButton;
+        private CheckBox lunaCurentaCheckBox;
 
         public VenituriPage(AdminUser adminUser)
         {
@@ -45,7 +53,7 @@ namespace ProiectBanca
             };
 
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70)); // Increased height for search panel
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             titleLabel = new Label
@@ -71,6 +79,16 @@ namespace ProiectBanca
                 PlaceholderText = "Caută venituri..."
             };
 
+            searchFieldComboBox = new ComboBox
+            {
+                Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Regular),
+                Width = 150,
+                Location = new Point(210, 10),
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+            searchFieldComboBox.Items.AddRange(new string[] { "ID", "Data", "Suma", "Valuta", "Descriere" });
+            searchFieldComboBox.SelectedIndex = 0;
+
             searchButton = new Button
             {
                 Text = "Caută",
@@ -80,10 +98,60 @@ namespace ProiectBanca
                 FlatStyle = FlatStyle.Flat,
                 Width = 120,
                 Height = 35,
-                Location = new Point(210, 5)
+                Location = new Point(370, 10)
             };
             searchButton.FlatAppearance.BorderSize = 0;
             searchButton.Click += SearchButton_Click;
+
+            // Adăugare RadioButtons pentru căutare
+            idRadioButton = new RadioButton
+            {
+                Text = "ID",
+                Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
+                Location = new Point(0, 45),
+                AutoSize = true,
+                Checked = true
+            };
+
+            dataRadioButton = new RadioButton
+            {
+                Text = "Data",
+                Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
+                Location = new Point(50, 45),
+                AutoSize = true
+            };
+
+            sumaRadioButton = new RadioButton
+            {
+                Text = "Suma",
+                Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
+                Location = new Point(100, 45),
+                AutoSize = true
+            };
+
+            valutaRadioButton = new RadioButton
+            {
+                Text = "Valuta",
+                Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
+                Location = new Point(160, 45),
+                AutoSize = true
+            };
+
+            // Adăugare CheckBox pentru filtrare
+            lunaCurentaCheckBox = new CheckBox
+            {
+                Text = "Doar luna curentă",
+                Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
+                Location = new Point(230, 45),
+                AutoSize = true
+            };
+            lunaCurentaCheckBox.CheckedChanged += LunaCurentaCheckBox_CheckedChanged;
+
+            // Conectarea RadioButtons cu ComboBox
+            idRadioButton.CheckedChanged += RadioButton_CheckedChanged;
+            dataRadioButton.CheckedChanged += RadioButton_CheckedChanged;
+            sumaRadioButton.CheckedChanged += RadioButton_CheckedChanged;
+            valutaRadioButton.CheckedChanged += RadioButton_CheckedChanged;
 
             addButton = new Button
             {
@@ -92,20 +160,26 @@ namespace ProiectBanca
                 BackColor = Color.FromArgb(101, 96, 184),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Width = 140,
+                Width = 180,
                 Height = 35,
-                Location = new Point(mainLayout.Width - 170, 5),
+                Location = new Point(mainLayout.Width - 200, 10),
                 Anchor = AnchorStyles.Right
             };
             addButton.FlatAppearance.BorderSize = 0;
             addButton.Click += AddButton_Click;
 
             searchPanel.Controls.Add(searchTextBox);
+            searchPanel.Controls.Add(searchFieldComboBox);
             searchPanel.Controls.Add(searchButton);
             searchPanel.Controls.Add(addButton);
-            searchPanel.Resize += (s, e) => 
+            searchPanel.Controls.Add(idRadioButton);
+            searchPanel.Controls.Add(dataRadioButton);
+            searchPanel.Controls.Add(sumaRadioButton);
+            searchPanel.Controls.Add(valutaRadioButton);
+            searchPanel.Controls.Add(lunaCurentaCheckBox);
+            searchPanel.Resize += (s, e) =>
             {
-                addButton.Location = new Point(searchPanel.Width - 170, 5);
+                addButton.Location = new Point(searchPanel.Width - 200, 10);
             };
 
             listViewPanel = new Panel
@@ -134,7 +208,6 @@ namespace ProiectBanca
             venituriListView.Resize += VenituriListView_Resize;
             venituriListView.ItemSelectionChanged += VenituriListView_ItemSelectionChanged;
        
-
             listViewPanel.Controls.Add(venituriListView);
 
             mainLayout.Controls.Add(titleLabel, 0, 0);
@@ -142,6 +215,45 @@ namespace ProiectBanca
             mainLayout.Controls.Add(listViewPanel, 0, 2);
 
             Controls.Add(mainLayout);
+        }
+
+        private void RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender is RadioButton radioButton && radioButton.Checked)
+            {
+                if (radioButton == idRadioButton)
+                    searchFieldComboBox.SelectedItem = "ID";
+                else if (radioButton == dataRadioButton)
+                    searchFieldComboBox.SelectedItem = "Data";
+                else if (radioButton == sumaRadioButton)
+                    searchFieldComboBox.SelectedItem = "Suma";
+                else if (radioButton == valutaRadioButton)
+                    searchFieldComboBox.SelectedItem = "Valuta";
+            }
+        }
+
+        private void LunaCurentaCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void ApplyFilters()
+        {
+            List<Tranzactie> filteredVenituri = venituri;
+
+            // Filtrare după luna curentă dacă este bifată
+            if (lunaCurentaCheckBox.Checked)
+            {
+                var currentDate = DateTime.Now;
+                var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+                filteredVenituri = venituri.Where(v => 
+                    v.DataTranzactie >= firstDayOfMonth && 
+                    v.DataTranzactie <= lastDayOfMonth).ToList();
+            }
+
+            ActualizeazaListaVenituri(filteredVenituri);
         }
 
         private void IncarcaVenituri()
@@ -153,7 +265,7 @@ namespace ProiectBanca
                     .OrderByDescending(t => t.DataTranzactie)
                     .ToList();
 
-                ActualizeazaListaVenituri(venituri);
+                ApplyFilters();
             }
         }
 
@@ -336,19 +448,33 @@ namespace ProiectBanca
         private void SearchButton_Click(object sender, EventArgs e)
         {
             string searchTerm = searchTextBox.Text.Trim().ToLower();
-            
+            string selectedField = searchFieldComboBox.SelectedItem.ToString();
+
             if (string.IsNullOrEmpty(searchTerm))
             {
-                ActualizeazaListaVenituri(venituri);
+                ApplyFilters();
                 return;
             }
 
             var rezultateCautare = venituri.Where(v =>
-                v.Id.ToString().Contains(searchTerm) ||
-                v.DataTranzactie.ToString("dd.MM.yyyy").Contains(searchTerm) ||
-                v.Suma.ToString().Contains(searchTerm) ||
-                v.Valuta.ToString().ToLower().Contains(searchTerm)
+                (selectedField == "ID" && v.Id.ToString().Contains(searchTerm)) ||
+                (selectedField == "Data" && v.DataTranzactie.ToString("dd.MM.yyyy").Contains(searchTerm)) ||
+                (selectedField == "Suma" && v.Suma.ToString().Contains(searchTerm)) ||
+                (selectedField == "Valuta" && v.Valuta.ToString().ToLower().Contains(searchTerm)) ||
+                (selectedField == "Descriere" && "Venit".ToLower().Contains(searchTerm))
             ).ToList();
+
+            // Aplicăm filtrarea după lună dacă este cazul
+            if (lunaCurentaCheckBox.Checked)
+            {
+                var currentDate = DateTime.Now;
+                var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+                rezultateCautare = rezultateCautare.Where(v => 
+                    v.DataTranzactie >= firstDayOfMonth && 
+                    v.DataTranzactie <= lastDayOfMonth).ToList();
+            }
 
             ActualizeazaListaVenituri(rezultateCautare);
         }
@@ -377,6 +503,10 @@ namespace ProiectBanca
         private DateTimePicker dataPicker;
         private Button saveButton;
         private Button cancelButton;
+        
+        // Noi controale
+        private CheckBox recurentCheckBox;
+        private CheckBox prioritarCheckBox;
 
         public AdaugaVenitForm(AdminUser adminUser, AdminTranzactii adminTranzactii)
         {
@@ -388,7 +518,7 @@ namespace ProiectBanca
         private void InitializeComponents()
         {
             this.Text = "Adaugă Venit Nou";
-            this.Size = new Size(400, 250);
+            this.Size = new Size(400, 300); // Mărit pentru noile controale
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterParent;
             this.MaximizeBox = false;
@@ -464,6 +594,23 @@ namespace ProiectBanca
                 Format = DateTimePickerFormat.Short,
                 Value = DateTime.Today
             };
+            
+            // Adăugare CheckBox-uri pentru opțiuni suplimentare
+            recurentCheckBox = new CheckBox
+            {
+                Text = "Venit recurent",
+                Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Regular),
+                Location = new Point(20, 140),
+                AutoSize = true
+            };
+            
+            prioritarCheckBox = new CheckBox
+            {
+                Text = "Venit prioritar",
+                Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Regular),
+                Location = new Point(160, 140),
+                AutoSize = true
+            };
 
             saveButton = new Button
             {
@@ -472,7 +619,7 @@ namespace ProiectBanca
                 BackColor = Color.FromArgb(101, 96, 184),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Location = new Point(80, 160),
+                Location = new Point(80, 200),
                 Size = new Size(100, 30)
             };
             saveButton.FlatAppearance.BorderSize = 0;
@@ -485,7 +632,7 @@ namespace ProiectBanca
                 BackColor = Color.Gray,
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Location = new Point(200, 160),
+                Location = new Point(200, 200),
                 Size = new Size(100, 30)
             };
             cancelButton.FlatAppearance.BorderSize = 0;
@@ -497,6 +644,8 @@ namespace ProiectBanca
             this.Controls.Add(valutaComboBox);
             this.Controls.Add(dataLabel);
             this.Controls.Add(dataPicker);
+            this.Controls.Add(recurentCheckBox);
+            this.Controls.Add(prioritarCheckBox);
             this.Controls.Add(saveButton);
             this.Controls.Add(cancelButton);
         }
@@ -514,12 +663,22 @@ namespace ProiectBanca
                 double suma = double.Parse(sumaTextBox.Text);
                 Valuta valuta = (Valuta)valutaComboBox.SelectedItem;
                 DateTime data = dataPicker.Value;
+                bool isRecurent = recurentCheckBox.Checked;
+                bool isPrioritar = prioritarCheckBox.Checked;
                 User currentUser = adminUser.GetUserCurent();
 
                 if (currentUser != null)
                 {
                     Tranzactie venit = new Tranzactie(valuta, suma, data, currentUser.Id, TipTranzactie.Venit);
                     adminTranzactii.AdaugaTranzactie(venit);
+                    
+                    string message = "Venitul a fost adăugat cu succes.";
+                    if (isRecurent)
+                        message += "\nVenitul a fost marcat ca recurent.";
+                    if (isPrioritar)
+                        message += "\nVenitul a fost marcat ca prioritar.";
+                    
+                    MessageBox.Show(message, "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     
                     this.DialogResult = DialogResult.OK;
                 }
