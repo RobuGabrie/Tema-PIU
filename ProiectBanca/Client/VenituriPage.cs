@@ -53,7 +53,7 @@ namespace ProiectBanca
             };
 
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70)); // Increased height for search panel
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70));
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             titleLabel = new Label
@@ -137,17 +137,17 @@ namespace ProiectBanca
                 AutoSize = true
             };
 
-            // Adăugare CheckBox pentru filtrare
+         
             lunaCurentaCheckBox = new CheckBox
             {
-                Text = "Doar luna curentă",
+                Text = "Doar luna curenta",
                 Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
                 Location = new Point(230, 45),
                 AutoSize = true
             };
             lunaCurentaCheckBox.CheckedChanged += LunaCurentaCheckBox_CheckedChanged;
 
-            // Conectarea RadioButtons cu ComboBox
+   
             idRadioButton.CheckedChanged += RadioButton_CheckedChanged;
             dataRadioButton.CheckedChanged += RadioButton_CheckedChanged;
             sumaRadioButton.CheckedChanged += RadioButton_CheckedChanged;

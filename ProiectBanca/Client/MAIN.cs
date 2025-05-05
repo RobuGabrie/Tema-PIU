@@ -36,7 +36,7 @@ namespace ProiectBanca
                 ActualizeazaInformatii(currentUser.Id);
             }
 
-            // Load DashboardPage into panel2 by default
+     
             var dashboardPage = new DashboardPage();
             dashboardPage.UpdateData(
                 adminTranzactii.CalculeazaTotalVenituri(currentUser.Id),
