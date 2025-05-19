@@ -22,14 +22,13 @@ namespace ProiectBanca
         private Button addButton;
         private Panel listViewPanel;
         private ListView venituriListView;
-        private Dictionary<int, Button> deleteButtons = new Dictionary<int, Button>();
 
-        // Noi controale pentru căutare
         private RadioButton idRadioButton;
         private RadioButton dataRadioButton;
         private RadioButton sumaRadioButton;
         private RadioButton valutaRadioButton;
-        private CheckBox lunaCurentaCheckBox;
+        private RadioButton descriereRadioButton;
+
 
         public VenituriPage(AdminUser adminUser)
         {
@@ -53,7 +52,7 @@ namespace ProiectBanca
             };
 
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             titleLabel = new Label
@@ -82,7 +81,7 @@ namespace ProiectBanca
             searchFieldComboBox = new ComboBox
             {
                 Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Regular),
-                Width = 150,
+                Width = 120,
                 Location = new Point(210, 10),
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
@@ -96,62 +95,57 @@ namespace ProiectBanca
                 BackColor = Color.FromArgb(101, 96, 184),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Width = 120,
-                Height = 35,
-                Location = new Point(370, 10)
+                Width = 100,
+                Height = 30,
+                Location = new Point(340, 10)
             };
             searchButton.FlatAppearance.BorderSize = 0;
             searchButton.Click += SearchButton_Click;
 
-            // Adăugare RadioButtons pentru căutare
             idRadioButton = new RadioButton
             {
                 Text = "ID",
                 Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
-                Location = new Point(0, 45),
+                Location = new Point(0, 50),
                 AutoSize = true,
                 Checked = true
             };
-
             dataRadioButton = new RadioButton
             {
                 Text = "Data",
                 Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
-                Location = new Point(50, 45),
+                Location = new Point(50, 50),
                 AutoSize = true
             };
-
             sumaRadioButton = new RadioButton
             {
                 Text = "Suma",
                 Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
-                Location = new Point(100, 45),
+                Location = new Point(110, 50),
                 AutoSize = true
             };
-
             valutaRadioButton = new RadioButton
             {
                 Text = "Valuta",
                 Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
-                Location = new Point(160, 45),
+                Location = new Point(180, 50),
                 AutoSize = true
             };
-
-         
-            lunaCurentaCheckBox = new CheckBox
+            descriereRadioButton = new RadioButton
             {
-                Text = "Doar luna curenta",
+                Text = "Descriere",
                 Font = new Font("Bahnschrift SemiBold Condensed", 10, FontStyle.Regular),
-                Location = new Point(230, 45),
+                Location = new Point(260, 50),
                 AutoSize = true
             };
-            lunaCurentaCheckBox.CheckedChanged += LunaCurentaCheckBox_CheckedChanged;
 
-   
             idRadioButton.CheckedChanged += RadioButton_CheckedChanged;
             dataRadioButton.CheckedChanged += RadioButton_CheckedChanged;
             sumaRadioButton.CheckedChanged += RadioButton_CheckedChanged;
             valutaRadioButton.CheckedChanged += RadioButton_CheckedChanged;
+            descriereRadioButton.CheckedChanged += RadioButton_CheckedChanged;
+
+
 
             addButton = new Button
             {
@@ -160,9 +154,9 @@ namespace ProiectBanca
                 BackColor = Color.FromArgb(101, 96, 184),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Width = 180,
+                Width = 150,
                 Height = 35,
-                Location = new Point(mainLayout.Width - 200, 10),
+                Location = new Point(500, 10),
                 Anchor = AnchorStyles.Right
             };
             addButton.FlatAppearance.BorderSize = 0;
@@ -176,10 +170,12 @@ namespace ProiectBanca
             searchPanel.Controls.Add(dataRadioButton);
             searchPanel.Controls.Add(sumaRadioButton);
             searchPanel.Controls.Add(valutaRadioButton);
-            searchPanel.Controls.Add(lunaCurentaCheckBox);
+            searchPanel.Controls.Add(descriereRadioButton);
+          
+
             searchPanel.Resize += (s, e) =>
             {
-                addButton.Location = new Point(searchPanel.Width - 200, 10);
+                addButton.Location = new Point(searchPanel.Width - addButton.Width - 10, 10);
             };
 
             listViewPanel = new Panel
@@ -204,10 +200,10 @@ namespace ProiectBanca
             venituriListView.Columns.Add("Valuta", 80);
             venituriListView.Columns.Add("Descriere", 200);
             venituriListView.Columns.Add("Acțiuni", 80);
+            venituriListView.Columns.Add("Editare", 80);
 
-            venituriListView.Resize += VenituriListView_Resize;
-            venituriListView.ItemSelectionChanged += VenituriListView_ItemSelectionChanged;
-       
+            venituriListView.MouseClick += VenituriListView_MouseClick;
+
             listViewPanel.Controls.Add(venituriListView);
 
             mainLayout.Controls.Add(titleLabel, 0, 0);
@@ -219,43 +215,14 @@ namespace ProiectBanca
 
         private void RadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (sender is RadioButton radioButton && radioButton.Checked)
-            {
-                if (radioButton == idRadioButton)
-                    searchFieldComboBox.SelectedItem = "ID";
-                else if (radioButton == dataRadioButton)
-                    searchFieldComboBox.SelectedItem = "Data";
-                else if (radioButton == sumaRadioButton)
-                    searchFieldComboBox.SelectedItem = "Suma";
-                else if (radioButton == valutaRadioButton)
-                    searchFieldComboBox.SelectedItem = "Valuta";
-            }
+            if (idRadioButton.Checked) searchFieldComboBox.SelectedItem = "ID";
+            else if (dataRadioButton.Checked) searchFieldComboBox.SelectedItem = "Data";
+            else if (sumaRadioButton.Checked) searchFieldComboBox.SelectedItem = "Suma";
+            else if (valutaRadioButton.Checked) searchFieldComboBox.SelectedItem = "Valuta";
+            else if (descriereRadioButton.Checked) searchFieldComboBox.SelectedItem = "Descriere";
         }
 
-        private void LunaCurentaCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            ApplyFilters();
-        }
-
-        private void ApplyFilters()
-        {
-            List<Tranzactie> filteredVenituri = venituri;
-
-            // Filtrare după luna curentă dacă este bifată
-            if (lunaCurentaCheckBox.Checked)
-            {
-                var currentDate = DateTime.Now;
-                var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
-                filteredVenituri = venituri.Where(v => 
-                    v.DataTranzactie >= firstDayOfMonth && 
-                    v.DataTranzactie <= lastDayOfMonth).ToList();
-            }
-
-            ActualizeazaListaVenituri(filteredVenituri);
-        }
-
+         
         private void IncarcaVenituri()
         {
             User currentUser = adminUser.GetUserCurent();
@@ -264,186 +231,127 @@ namespace ProiectBanca
                 venituri = adminTranzactii.GetTranzactiiUtilizatorDupaTip(currentUser.Id, TipTranzactie.Venit)
                     .OrderByDescending(t => t.DataTranzactie)
                     .ToList();
-
                 ApplyFilters();
             }
+        }
+
+        private void ApplyFilters()
+        {
+            List<Tranzactie> filteredVenituri = venituri;
+           
+            ActualizeazaListaVenituri(filteredVenituri);
         }
 
         private void ActualizeazaListaVenituri(List<Tranzactie> listaVenituri)
         {
             venituriListView.Items.Clear();
-            ClearDeleteButtons();
 
-            foreach (Tranzactie venit in listaVenituri)
+            foreach (var venit in listaVenituri)
             {
                 ListViewItem item = new ListViewItem(venit.Id.ToString());
                 item.SubItems.Add(venit.DataTranzactie.ToShortDateString());
                 item.SubItems.Add(venit.Suma.ToString("N2"));
                 item.SubItems.Add(venit.Valuta.ToString());
                 item.SubItems.Add("Venit");
-                item.SubItems.Add("");
+                item.SubItems.Add("Șterge");
+                item.SubItems.Add("Editare");
                 item.Tag = venit;
-
                 venituriListView.Items.Add(item);
             }
 
-            int currentLastColumnWidth = venituriListView.Columns[5].Width;
-            
             for (int i = 0; i < venituriListView.Columns.Count - 1; i++)
-            {
                 venituriListView.Columns[i].Width = -2;
-            }
             
-            venituriListView.Columns[5].Width = 80;
-            
-            CreateDeleteButtons();
         }
 
-        private void CreateDeleteButtons()
+        private void VenituriListView_MouseClick(object sender, MouseEventArgs e)
         {
-            int buttonWidth = 60;
-            int buttonHeight = 23;
-
-            for (int i = 0; i < venituriListView.Items.Count; i++)
+            var info = venituriListView.HitTest(e.Location);
+            if (info.Item != null && info.SubItem != null)
             {
-                ListViewItem item = venituriListView.Items[i];
-                
-                Rectangle actionColumnBounds = GetSubItemBounds(item, 5);
-                
-                Button deleteButton = new Button
+                int colIndex = info.Item.SubItems.IndexOf(info.SubItem);
+                if (colIndex == 5)
                 {
-                    Text = "Șterge",
-                    Tag = item.Tag,
-                    Size = new Size(buttonWidth, buttonHeight),
-                    FlatStyle = FlatStyle.Flat,
-                    BackColor = Color.Red,
-                    ForeColor = Color.White,
-                    Font = new Font("Bahnschrift SemiBold", 9, FontStyle.Bold),
-                    Cursor = Cursors.Hand
-                };
-                deleteButton.FlatAppearance.BorderSize = 0;
-                deleteButton.Click += DeleteButton_Click;
-                
-                int x = actionColumnBounds.X + (actionColumnBounds.Width - buttonWidth) / 2;
-                int y = actionColumnBounds.Y + (actionColumnBounds.Height - buttonHeight) / 2;
-                deleteButton.Location = new Point(x, y);
-                
-                listViewPanel.Controls.Add(deleteButton);
-                deleteButtons[i] = deleteButton;
-                
-                deleteButton.BringToFront();
-            }
-        }
-
-        private void ClearDeleteButtons()
-        {
-            foreach (Button button in deleteButtons.Values)
-            {
-                listViewPanel.Controls.Remove(button);
-                button.Dispose();
-            }
-
-            deleteButtons.Clear();
-        }
-
-        private Rectangle GetSubItemBounds(ListViewItem item, int subItemIndex)
-        {
-            if (venituriListView.View != View.Details)
-                return Rectangle.Empty;
-
-            int columnWidth = 0;
-            for (int i = 0; i < subItemIndex; i++)
-            {
-                columnWidth += venituriListView.Columns[i].Width;
-            }
-
-            Rectangle subItemRect = new Rectangle(
-                columnWidth,
-                item.Position.Y,
-                venituriListView.Columns[subItemIndex].Width,
-                item.Bounds.Height
-            );
-
-            return subItemRect;
-        }
-
-        private void UpdateDeleteButtonPositions()
-        {
-            int buttonWidth = 60;
-            int buttonHeight = 23;
-
-            for (int i = 0; i < venituriListView.Items.Count; i++)
-            {
-                if (deleteButtons.TryGetValue(i, out Button deleteButton))
-                {
-                    ListViewItem item = venituriListView.Items[i];
-                    Rectangle actionColumnBounds = GetSubItemBounds(item, 5);
-                    
-                    if (item.Position.Y >= 0 && item.Position.Y <= venituriListView.ClientSize.Height)
+                    Tranzactie tranzactie = info.Item.Tag as Tranzactie;
+                    if (tranzactie != null)
                     {
-                        int x = actionColumnBounds.X + (actionColumnBounds.Width - buttonWidth) / 2;
-                        int y = actionColumnBounds.Y + (actionColumnBounds.Height - buttonHeight) / 2;
-                        deleteButton.Location = new Point(x, y);
-                        deleteButton.Visible = true;
-                    }
-                    else
-                    {
-                        deleteButton.Visible = false;
+                        var confirmResult = MessageBox.Show(
+                            "Sigur doriți să ștergeți această tranzacție?",
+                            "Confirmare Ștergere",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Warning);
+
+                        if (confirmResult == DialogResult.Yes)
+                        {
+                            if (adminTranzactii.StergeTranzactie(tranzactie.Id))
+                            {
+                                MessageBox.Show(
+                                    "Tranzacția a fost ștearsă cu succes.",
+                                    "Succes",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                                IncarcaVenituri();
+                            }
+                            else
+                            {
+                                MessageBox.Show(
+                                    "Eroare la ștergerea tranzacției.",
+                                    "Eroare",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            }
+                        }
                     }
                 }
-            }
-        }
-
-        private void VenituriListView_Resize(object sender, EventArgs e)
-        {
-            UpdateDeleteButtonPositions();
-        }
-
-        private void VenituriListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            UpdateDeleteButtonPositions();
-        }
-
-        private void VenituriListView_Scroll(object sender, EventArgs e)
-        {
-            UpdateDeleteButtonPositions();
-        }
-
-        private void DeleteButton_Click(object sender, EventArgs e)
-        {
-            if (sender is Button deleteButton && deleteButton.Tag is Tranzactie tranzactie)
-            {
-                int tranzactieId = tranzactie.Id;
-                
-                var confirmResult = MessageBox.Show(
-                    "Sigur doriți să ștergeți această tranzacție?", 
-                    "Confirmare Ștergere", 
-                    MessageBoxButtons.YesNo, 
-                    MessageBoxIcon.Warning);
-                
-                if (confirmResult == DialogResult.Yes)
+                if (colIndex == 6)
                 {
-                    if (adminTranzactii.StergeTranzactie(tranzactieId))
+                    Tranzactie tranzactie = info.Item.Tag as Tranzactie;
+                    if (tranzactie != null)
                     {
-                        MessageBox.Show(
-                            "Tranzacția a fost ștearsă cu succes.", 
-                            "Succes", 
-                            MessageBoxButtons.OK, 
-                            MessageBoxIcon.Information);
-                        
-                        IncarcaVenituri();
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "Eroare la ștergerea tranzacției.", 
-                            "Eroare", 
-                            MessageBoxButtons.OK, 
-                            MessageBoxIcon.Error);
+                        AdaugaVenitForm editVenitForm = new AdaugaVenitForm(adminUser, adminTranzactii);
+                        editVenitForm.Text = "Editare Venit";
+                        editVenitForm.sumaTextBox.Text = tranzactie.Suma.ToString("N2");
+                        editVenitForm.valutaComboBox.SelectedItem = tranzactie.Valuta;
+                        editVenitForm.dataPicker.Value = tranzactie.DataTranzactie;
+                        editVenitForm.saveButton.Text = "Salvează";
+
+                        // Afișează formularul și verifică dacă a fost salvat
+                        if (editVenitForm.ShowDialog() == DialogResult.OK)
+                        {
+                            // Validare și salvare după închiderea formularului
+                            if (string.IsNullOrWhiteSpace(editVenitForm.sumaTextBox.Text))
+                            {
+                                MessageBox.Show("Vă rugăm să introduceți o sumă.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            if (!double.TryParse(editVenitForm.sumaTextBox.Text, out double suma))
+                            {
+                                MessageBox.Show("Sumă invalidă.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            Valuta valuta = (Valuta)editVenitForm.valutaComboBox.SelectedItem;
+                            DateTime data = editVenitForm.dataPicker.Value;
+
+                            Tranzactie tranzactieEditata = new Tranzactie(
+                                valuta,
+                                suma,
+                                data,
+                                tranzactie.UserId,
+                                TipTranzactie.Venit
+                            );
+                            tranzactieEditata.Id = tranzactie.Id;
+
+                            adminTranzactii.ActualizeazaTranzactie(tranzactie.Id, tranzactieEditata);
+                            IncarcaVenituri();
+                        }
                     }
                 }
+
             }
         }
+        
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
@@ -464,17 +372,7 @@ namespace ProiectBanca
                 (selectedField == "Descriere" && "Venit".ToLower().Contains(searchTerm))
             ).ToList();
 
-            // Aplicăm filtrarea după lună dacă este cazul
-            if (lunaCurentaCheckBox.Checked)
-            {
-                var currentDate = DateTime.Now;
-                var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
-                rezultateCautare = rezultateCautare.Where(v => 
-                    v.DataTranzactie >= firstDayOfMonth && 
-                    v.DataTranzactie <= lastDayOfMonth).ToList();
-            }
+          
 
             ActualizeazaListaVenituri(rezultateCautare);
         }
@@ -495,18 +393,15 @@ namespace ProiectBanca
     {
         private AdminUser adminUser;
         private AdminTranzactii adminTranzactii;
-        private Label sumaLabel;
-        private TextBox sumaTextBox;
-        private Label valutaLabel;
-        private ComboBox valutaComboBox;
-        private Label dataLabel;
-        private DateTimePicker dataPicker;
-        private Button saveButton;
-        private Button cancelButton;
-        
-        // Noi controale
-        private CheckBox recurentCheckBox;
-        private CheckBox prioritarCheckBox;
+        public Label sumaLabel;
+        public TextBox sumaTextBox;
+        public Label valutaLabel;
+        public ComboBox valutaComboBox;
+        public Label dataLabel;
+        public DateTimePicker dataPicker;
+        public Button saveButton;
+        public Button cancelButton;
+      
 
         public AdaugaVenitForm(AdminUser adminUser, AdminTranzactii adminTranzactii)
         {
@@ -518,7 +413,7 @@ namespace ProiectBanca
         private void InitializeComponents()
         {
             this.Text = "Adaugă Venit Nou";
-            this.Size = new Size(400, 300); // Mărit pentru noile controale
+            this.Size = new Size(400, 300);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterParent;
             this.MaximizeBox = false;
@@ -539,17 +434,12 @@ namespace ProiectBanca
                 Location = new Point(160, 20),
                 Size = new Size(200, 25)
             };
-            sumaTextBox.KeyPress += (s, e) => 
+            sumaTextBox.KeyPress += (s, e) =>
             {
                 if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
-                {
                     e.Handled = true;
-                }
-
                 if (e.KeyChar == '.' && (s as TextBox).Text.IndexOf('.') > -1)
-                {
                     e.Handled = true;
-                }
             };
 
             valutaLabel = new Label
@@ -571,11 +461,8 @@ namespace ProiectBanca
             foreach (Valuta valuta in Enum.GetValues(typeof(Valuta)))
             {
                 if (valuta != Valuta.NEDEFINITA)
-                {
                     valutaComboBox.Items.Add(valuta);
-                }
             }
-
             valutaComboBox.SelectedItem = Valuta.RON;
 
             dataLabel = new Label
@@ -594,23 +481,7 @@ namespace ProiectBanca
                 Format = DateTimePickerFormat.Short,
                 Value = DateTime.Today
             };
-            
-            // Adăugare CheckBox-uri pentru opțiuni suplimentare
-            recurentCheckBox = new CheckBox
-            {
-                Text = "Venit recurent",
-                Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Regular),
-                Location = new Point(20, 140),
-                AutoSize = true
-            };
-            
-            prioritarCheckBox = new CheckBox
-            {
-                Text = "Venit prioritar",
-                Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Regular),
-                Location = new Point(160, 140),
-                AutoSize = true
-            };
+
 
             saveButton = new Button
             {
@@ -644,13 +515,12 @@ namespace ProiectBanca
             this.Controls.Add(valutaComboBox);
             this.Controls.Add(dataLabel);
             this.Controls.Add(dataPicker);
-            this.Controls.Add(recurentCheckBox);
-            this.Controls.Add(prioritarCheckBox);
+         
             this.Controls.Add(saveButton);
             this.Controls.Add(cancelButton);
         }
 
-        private void SaveButton_Click(object sender, EventArgs e)
+        public void SaveButton_Click(object sender, EventArgs e)
         {
             try
             {
@@ -663,23 +533,16 @@ namespace ProiectBanca
                 double suma = double.Parse(sumaTextBox.Text);
                 Valuta valuta = (Valuta)valutaComboBox.SelectedItem;
                 DateTime data = dataPicker.Value;
-                bool isRecurent = recurentCheckBox.Checked;
-                bool isPrioritar = prioritarCheckBox.Checked;
                 User currentUser = adminUser.GetUserCurent();
 
                 if (currentUser != null)
                 {
                     Tranzactie venit = new Tranzactie(valuta, suma, data, currentUser.Id, TipTranzactie.Venit);
                     adminTranzactii.AdaugaTranzactie(venit);
-                    
+
                     string message = "Venitul a fost adăugat cu succes.";
-                    if (isRecurent)
-                        message += "\nVenitul a fost marcat ca recurent.";
-                    if (isPrioritar)
-                        message += "\nVenitul a fost marcat ca prioritar.";
-                    
+
                     MessageBox.Show(message, "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    
                     this.DialogResult = DialogResult.OK;
                 }
                 else

@@ -252,6 +252,6 @@ namespace ProiectBanca
         private PictureBox pictureBox4;
         private Button button1;
         private PictureBox pictureBox1;
-        private Panel panel2; // Add this declaration for panel2
+        private Panel panel2; 
     }
 }

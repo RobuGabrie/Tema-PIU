@@ -29,10 +29,9 @@ namespace ProiectBanca
 
         private void InitializeComponents()
         {
-            // Set the background color of the page to white
+      
             this.BackColor = Color.White;
 
-            // Create the main layout
             mainLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -42,19 +41,19 @@ namespace ProiectBanca
                 BackColor = Color.White
             };
 
-            // Configure column widths
+           
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
 
-            // Configure row heights
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60)); // Title
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50)); // Amount
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50)); // Source Currency
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50)); // Destination Currency
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50)); // Convert Button
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 80)); // Result
+            
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50)); 
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50)); 
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50)); 
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 80)); 
 
-            // Create title label
+         
             titleLabel = new Label
             {
                 Text = "Schimb Valutar",
@@ -64,7 +63,7 @@ namespace ProiectBanca
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
-            // Create amount label and textbox
+          
             amountLabel = new Label
             {
                 Text = "Sumă:",

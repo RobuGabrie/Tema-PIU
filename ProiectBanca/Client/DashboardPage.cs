@@ -21,10 +21,10 @@ namespace ProiectBanca
 
         private void InitializeComponents()
         {
-            // Set the background color of the page to white
+          
             this.BackColor = Color.White;
 
-            // Create a table layout with 3 columns and 3 rows
+          
             mainLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -34,7 +34,7 @@ namespace ProiectBanca
                 BackColor = Color.White
             };
 
-            // Define column and row styles
+           
             for (int i = 0; i < 3; i++)
             {
                 mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
@@ -44,7 +44,6 @@ namespace ProiectBanca
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40F)); // Second row - Cheltuieli
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 20F)); // Third row - Bilanț Total
 
-            // Create the dashboard panels
             var totalVenituriPanel = CreateInfoPanel("Total Venituri", out totalVenituriLabel);
             var venituriLunarePanel = CreateInfoPanel("Venituri Lunare", out venituriLunareLabel);
             var venituriZilnicePanel = CreateInfoPanel("Venituri Zilnice", out venituriZilniceLabel);
@@ -71,7 +70,7 @@ namespace ProiectBanca
 
         private Panel CreateInfoPanel(string title, out Label valueLabel, bool isLarge = false)
         {
-            // Create panel with colored background
+            
             Panel panel = new Panel
             {
                 BackColor = Color.FromArgb(101, 96, 184),
@@ -80,7 +79,7 @@ namespace ProiectBanca
                 Margin = new Padding(8)
             };
 
-            // Create title label
+          
             Label titleLabel = new Label
             {
                 Text = title,
@@ -91,7 +90,7 @@ namespace ProiectBanca
                 Height = 25
             };
 
-            // Create value label
+            
             valueLabel = new Label
             {
                 Text = "0",
@@ -100,8 +99,7 @@ namespace ProiectBanca
                 Font = new Font("Bahnschrift SemiBold Condensed", isLarge ? 20 : 16, FontStyle.Bold),
                 ForeColor = Color.White
             };
-
-            // Add labels to panel
+            
             panel.Controls.Add(valueLabel);
             panel.Controls.Add(titleLabel);
 
@@ -112,7 +110,7 @@ namespace ProiectBanca
         {
             try
             {
-                // Update labels with formatted data
+               
                 totalVenituriLabel.Text = $"{totalVenituri:C}";
                 venituriLunareLabel.Text = $"{venituriLunare:C}";
                 venituriZilniceLabel.Text = $"{venituriZilnice:C}";

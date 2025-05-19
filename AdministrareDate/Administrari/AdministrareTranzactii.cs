@@ -35,7 +35,8 @@ namespace Modele.ClaseModele
             SalveazaTranzactii(tranzactii);
         }
 
-        
+
+
         public List<Tranzactie> GetTranzactiiUtilizator(int userId)
         {
             List<Tranzactie> tranzactii = IncarcaTranzactii();
@@ -58,15 +59,21 @@ namespace Modele.ClaseModele
                                          t.DataTranzactie <= dataEnd).ToList();
         }
 
+       
+
         public bool ActualizeazaTranzactie(int tranzactieId, Tranzactie tranzactieActualizata)
         {
             List<Tranzactie> tranzactii = IncarcaTranzactii();
             int index = tranzactii.FindIndex(t => t.Id == tranzactieId);
 
             if (index != -1)
-            {
+            {   
+                tranzactieActualizata.Id = tranzactieId;
                 tranzactii[index] = tranzactieActualizata;
+                
                 SalveazaTranzactii(tranzactii);
+
+                StergeTranzactie(tranzactieActualizata.Id);
                 return true;
             }
 

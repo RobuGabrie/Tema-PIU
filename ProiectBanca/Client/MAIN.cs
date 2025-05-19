@@ -15,7 +15,7 @@ namespace ProiectBanca
             this.adminUser = adminUser;
             this.adminTranzactii = new AdminTranzactii();
 
-            // Obține utilizatorul curent și afișează numele acestuia
+            
             User currentUser = adminUser.GetUserCurent();
             if (currentUser != null)
             {
@@ -53,7 +53,7 @@ namespace ProiectBanca
         {
             try
             {
-                // Calculează veniturile și cheltuielile utilizatorului
+          
                 double totalVenituri = adminTranzactii.CalculeazaTotalVenituri(userId);
                 double totalCheltuieli = adminTranzactii.CalculeazaTotalCheltuieli(userId);
             }
@@ -65,10 +65,10 @@ namespace ProiectBanca
 
         private void LoadPage(UserControl page)
         {
-            panel2.Controls.Clear(); // Clear the panel
-            page.Dock = DockStyle.Fill; // Set the new page to fill the panel
-            panel2.Controls.Add(page); // Add the new page to the panel
-            panel2.BringToFront(); // Ensure the panel is brought to the front
+            panel2.Controls.Clear();
+            page.Dock = DockStyle.Fill;
+            panel2.Controls.Add(page); 
+            panel2.BringToFront(); 
         }
 
         private void DashboardButton_Click(object sender, EventArgs e)
@@ -93,18 +93,18 @@ namespace ProiectBanca
             }
         }
 
-        private void Button1_Click(object sender, EventArgs e) // Venituri
+        private void Button1_Click(object sender, EventArgs e) 
         {
-            // Pass the current adminUser instance to VenituriPage
+          
             LoadPage(new VenituriPage(adminUser));
         }
 
-        private void Button2_Click(object sender, EventArgs e) // Cheltuieli
+        private void Button2_Click(object sender, EventArgs e) 
         {
-            LoadPage(new CheltuieliPage());
+            LoadPage(new CheltuieliPage(adminUser));
         }
 
-        private void Button3_Click(object sender, EventArgs e) // Schimb Valutar
+        private void Button3_Click(object sender, EventArgs e) 
         {
             LoadPage(new SchimbValutarPage());
         }
