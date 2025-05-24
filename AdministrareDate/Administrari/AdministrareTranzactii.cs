@@ -104,7 +104,7 @@ namespace Modele.ClaseModele
             
             foreach (var tranzactie in tranzactii.Where(t => t.UserId == userId && t.Tip == TipTranzactie.Venit))
             {
-                // Convertește suma în RON folosind metoda SchimbValutar
+             
                 double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
                 total += sumaInRON;
             }
@@ -120,7 +120,7 @@ namespace Modele.ClaseModele
             
             foreach (var tranzactie in tranzactii.Where(t => t.UserId == userId && t.Tip == TipTranzactie.Cheltuiala))
             {
-                // Convertește suma în RON folosind metoda SchimbValutar
+                
                 double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
                 total += sumaInRON;
             }
@@ -132,8 +132,6 @@ namespace Modele.ClaseModele
         {
             Dictionary<string, double> rateValutare = RateValutare.Rate;
         
-
-           
             double sumaInRON = suma * rateValutare[valutaSursa]; 
             double result = sumaInRON / rateValutare[valutaDestinatie]; 
             
@@ -159,28 +157,7 @@ namespace Modele.ClaseModele
             string jsonString = JsonSerializer.Serialize(tranzactii, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(filePath, jsonString);
         }
-        public Dictionary<Valuta, List<Tranzactie>> GetTranzactiiGrupatePerValuta(int userId)
-        {
-            List<Tranzactie> tranzactii = IncarcaTranzactii();
-
-            List<Tranzactie> tranzactiiUtilizator = tranzactii.Where(t => t.UserId == userId).ToList();
-
-            Dictionary<Valuta, List<Tranzactie>> tranzactiiPerValuta = new Dictionary<Valuta, List<Tranzactie>>();
-
-            foreach (Tranzactie tranzactie in tranzactiiUtilizator)
-            {
-                Valuta valutaTranzactie = tranzactie.Valuta;
-
-                if (!tranzactiiPerValuta.ContainsKey(valutaTranzactie))
-                {
-                    tranzactiiPerValuta[valutaTranzactie] = new List<Tranzactie>();
-                }
-
-                tranzactiiPerValuta[valutaTranzactie].Add(tranzactie);
-            }
-
-            return tranzactiiPerValuta;
-        }
+        
 
         public double CalculeazaVenituriLunare(int userId)
         {
@@ -190,7 +167,6 @@ namespace Modele.ClaseModele
             
             foreach (var tranzactie in tranzactiiLunare)
             {
-                // Convertește suma în RON
                 double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
                 total += sumaInRON;
             }
@@ -206,7 +182,7 @@ namespace Modele.ClaseModele
             
             foreach (var tranzactie in tranzactiiZilnice)
             {
-                // Convertește suma în RON
+                
                 double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
                 total += sumaInRON;
             }
@@ -222,7 +198,7 @@ namespace Modele.ClaseModele
             
             foreach (var tranzactie in tranzactiiLunare)
             {
-                // Convertește suma în RON
+              
                 double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
                 total += sumaInRON;
             }
@@ -238,7 +214,6 @@ namespace Modele.ClaseModele
             
             foreach (var tranzactie in tranzactiiZilnice)
             {
-                // Convertește suma în RON
                 double sumaInRON = SchimbValutar(tranzactie.Suma, tranzactie.Valuta.ToString(), "RON");
                 total += sumaInRON;
             }

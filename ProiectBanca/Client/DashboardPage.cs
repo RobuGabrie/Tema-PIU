@@ -40,9 +40,9 @@ namespace ProiectBanca
                 mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
             }
             
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40F)); // First row - Venituri
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40F)); // Second row - Cheltuieli
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 20F)); // Third row - Bilanț Total
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40F)); 
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 20F)); 
 
             var totalVenituriPanel = CreateInfoPanel("Total Venituri", out totalVenituriLabel);
             var venituriLunarePanel = CreateInfoPanel("Venituri Lunare", out venituriLunareLabel);
@@ -52,7 +52,7 @@ namespace ProiectBanca
             var cheltuieliZilnicePanel = CreateInfoPanel("Cheltuieli Zilnice", out cheltuieliZilniceLabel);
             var bilantTotalPanel = CreateInfoPanel("Bilanț Total", out bilantTotalLabel, true);
 
-            // Add panels to the layout
+        
             mainLayout.Controls.Add(totalVenituriPanel, 0, 0);
             mainLayout.Controls.Add(venituriLunarePanel, 1, 0);
             mainLayout.Controls.Add(venituriZilnicePanel, 2, 0);
@@ -60,11 +60,9 @@ namespace ProiectBanca
             mainLayout.Controls.Add(cheltuieliLunarePanel, 1, 1);
             mainLayout.Controls.Add(cheltuieliZilnicePanel, 2, 1);
             
-            // Add Bilanț Total panel to the last row, spanning all columns
             mainLayout.Controls.Add(bilantTotalPanel, 0, 2);
             mainLayout.SetColumnSpan(bilantTotalPanel, 3);
 
-            // Add the main layout to the control
             Controls.Add(mainLayout);
         }
 
@@ -121,7 +119,7 @@ namespace ProiectBanca
             }
             catch (Exception ex)
             {
-                // Handle any errors that occur during label updates
+                
                 MessageBox.Show($"Eroare la actualizarea datelor în Dashboard: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

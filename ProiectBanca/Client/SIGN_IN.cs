@@ -17,35 +17,7 @@ namespace ProiectBanca
             linkLabel1.LinkClicked += new LinkLabelLinkClickedEventHandler(linkLabel1_LinkClicked);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            // Initializare formular
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            // Logica pentru desenare panel
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-            // Logica click pe label1
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-            // Logica click pe label5
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-            // Logica click pe label6
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            // Logica pentru modificare text in textBox1
-        }
+      
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
@@ -85,15 +57,12 @@ namespace ProiectBanca
                     {
                         MessageBox.Show($"Autentificare reusita! Bun venit, {currentUser.Nume}.", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Transmite instanța de AdminUser către MAIN
+                        
                         MAIN mainForm = new MAIN(adminUser);
                         mainForm.Show();
                         this.Hide();
                     }
-                    else
-                    {
-                        MessageBox.Show("Autentificare reusita, dar utilizatorul curent nu a fost setat corect.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+             
                 }
                 else
                 {

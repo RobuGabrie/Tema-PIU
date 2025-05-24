@@ -90,7 +90,7 @@ namespace ProiectBanca
 
             searchButton = new Button
             {
-                Text = "Caută",
+                Text = "Cauta",
                 Font = new Font("Bahnschrift SemiBold Condensed", 14, FontStyle.Bold),
                 BackColor = Color.FromArgb(101, 96, 184),
                 ForeColor = Color.White,
@@ -412,7 +412,7 @@ namespace ProiectBanca
 
         private void InitializeComponents()
         {
-            this.Text = "Adaugă Venit Nou";
+            this.Text = "Adauga Venit Nou";
             this.Size = new Size(400, 300);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterParent;
@@ -434,13 +434,7 @@ namespace ProiectBanca
                 Location = new Point(160, 20),
                 Size = new Size(200, 25)
             };
-            sumaTextBox.KeyPress += (s, e) =>
-            {
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
-                    e.Handled = true;
-                if (e.KeyChar == '.' && (s as TextBox).Text.IndexOf('.') > -1)
-                    e.Handled = true;
-            };
+           
 
             valutaLabel = new Label
             {
@@ -485,7 +479,7 @@ namespace ProiectBanca
 
             saveButton = new Button
             {
-                Text = "Salvează",
+                Text = "Salveaza",
                 Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Bold),
                 BackColor = Color.FromArgb(101, 96, 184),
                 ForeColor = Color.White,
@@ -498,7 +492,7 @@ namespace ProiectBanca
 
             cancelButton = new Button
             {
-                Text = "Anulează",
+                Text = "Anuleaza",
                 Font = new Font("Bahnschrift SemiBold Condensed", 12, FontStyle.Bold),
                 BackColor = Color.Gray,
                 ForeColor = Color.White,
@@ -526,7 +520,7 @@ namespace ProiectBanca
             {
                 if (string.IsNullOrEmpty(sumaTextBox.Text))
                 {
-                    MessageBox.Show("Vă rugăm să introduceți o sumă.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Va rugam sa introduceti o suma.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -540,7 +534,7 @@ namespace ProiectBanca
                     Tranzactie venit = new Tranzactie(valuta, suma, data, currentUser.Id, TipTranzactie.Venit);
                     adminTranzactii.AdaugaTranzactie(venit);
 
-                    string message = "Venitul a fost adăugat cu succes.";
+                    string message = "Venitul a fost adaugat cu succes.";
 
                     MessageBox.Show(message, "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.OK;

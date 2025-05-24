@@ -58,10 +58,7 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(395, 607);
             panel1.TabIndex = 0;
-            panel1.Paint += panel1_Paint;
-            // 
-            // label3
-            // 
+    
             label3.AutoSize = true;
             label3.Font = new Font("Bahnschrift Condensed", 13.8F);
             label3.ForeColor = Color.CornflowerBlue;
@@ -90,10 +87,7 @@
             label1.TabIndex = 1;
             label1.Text = "Management tranzactii";
             label1.TextAlign = ContentAlignment.MiddleCenter;
-            label1.Click += label1_Click;
-            // 
-            // pictureBox1
-            // 
+        
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(82, 104);
             pictureBox1.Name = "pictureBox1";
@@ -121,19 +115,13 @@
             label5.Size = new Size(115, 36);
             label5.TabIndex = 2;
             label5.Text = "Username";
-            label5.Click += label5_Click;
-            // 
-            // textBox1
-            // 
+      
             textBox1.Font = new Font("Bahnschrift SemiLight Condensed", 12F);
             textBox1.Location = new Point(119, 188);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(378, 32);
             textBox1.TabIndex = 3;
-            textBox1.TextChanged += textBox1_TextChanged;
-            // 
-            // label6
-            // 
+        
             label6.AutoSize = true;
             label6.Font = new Font("Bahnschrift Condensed", 18F);
             label6.Location = new Point(119, 257);
@@ -141,10 +129,7 @@
             label6.Size = new Size(78, 36);
             label6.TabIndex = 4;
             label6.Text = "Parola";
-            label6.Click += label6_Click;
-            // 
-            // textBox2
-            // 
+        
             textBox2.Font = new Font("Bahnschrift SemiLight Condensed", 12F);
             textBox2.Location = new Point(119, 307);
             textBox2.Name = "textBox2";
@@ -210,7 +195,7 @@
             RightToLeft = RightToLeft.No;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Management tranzactii";
-            Load += Form1_Load;
+         
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

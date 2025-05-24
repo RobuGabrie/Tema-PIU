@@ -66,7 +66,7 @@ namespace ProiectBanca
           
             amountLabel = new Label
             {
-                Text = "Sumă:",
+                Text = "Suma:",
                 Font = new Font("Bahnschrift SemiBold Condensed", 14, FontStyle.Bold),
                 ForeColor = Color.Black,
                 Dock = DockStyle.Fill,
@@ -81,7 +81,7 @@ namespace ProiectBanca
             };
             amountTextBox.KeyPress += AmountTextBox_KeyPress;
 
-            // Create source currency label and combobox
+            
             sourceCurrencyLabel = new Label
             {
                 Text = "Din valuta:",
@@ -99,10 +99,10 @@ namespace ProiectBanca
                 Margin = new Padding(3)
             };
 
-            // Create destination currency label and combobox
+            
             destinationCurrencyLabel = new Label
             {
-                Text = "În valuta:",
+                Text = "In valuta:",
                 Font = new Font("Bahnschrift SemiBold Condensed", 14, FontStyle.Bold),
                 ForeColor = Color.Black,
                 Dock = DockStyle.Fill,
@@ -117,10 +117,10 @@ namespace ProiectBanca
                 Margin = new Padding(3)
             };
 
-            // Create convert button
+            
             convertButton = new Button
             {
-                Text = "Convertește",
+                Text = "Converteste",
                 Font = new Font("Bahnschrift SemiBold Condensed", 14, FontStyle.Bold),
                 BackColor = Color.FromArgb(101, 96, 184),
                 ForeColor = Color.White,
@@ -131,7 +131,6 @@ namespace ProiectBanca
             convertButton.FlatAppearance.BorderSize = 0;
             convertButton.Click += ConvertButton_Click;
 
-            // Create result label
             resultLabel = new Label
             {
                 Text = "Rezultat: ",
@@ -141,7 +140,6 @@ namespace ProiectBanca
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            // Add controls to the layout
             mainLayout.Controls.Add(titleLabel, 0, 0);
             mainLayout.SetColumnSpan(titleLabel, 2);
 
@@ -160,55 +158,38 @@ namespace ProiectBanca
             mainLayout.Controls.Add(resultLabel, 0, 5);
             mainLayout.SetColumnSpan(resultLabel, 2);
 
-            // Add the main layout to the control
+ 
             Controls.Add(mainLayout);
         }
 
         private void LoadCurrencies()
         {
-            // Load currencies from the RateValutare class
+            
             foreach (KeyValuePair<string, double> rate in RateValutare.Rate)
             {
                 sourceCurrencyComboBox.Items.Add(rate.Key);
                 destinationCurrencyComboBox.Items.Add(rate.Key);
             }
 
-            // Set default selections if items exist
-            if (sourceCurrencyComboBox.Items.Count > 0)
-            {
-                sourceCurrencyComboBox.SelectedIndex = 0;
-            }
-
-            if (destinationCurrencyComboBox.Items.Count > 1)
-            {
-                destinationCurrencyComboBox.SelectedIndex = 1;
-            }
-            else if (destinationCurrencyComboBox.Items.Count > 0)
-            {
-                destinationCurrencyComboBox.SelectedIndex = 0;
-            }
+           
         }
 
         private void AmountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Allow only numbers, decimal point, and control characters
+            
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
             {
                 e.Handled = true;
             }
 
-            // Only allow one decimal point
-            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
-            {
-                e.Handled = true;
-            }
+            
+      
         }
 
         private void ConvertButton_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate inputs
                 if (string.IsNullOrEmpty(amountTextBox.Text))
                 {
                     MessageBox.Show("Vă rugăm să introduceți o sumă.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -221,15 +202,15 @@ namespace ProiectBanca
                     return;
                 }
 
-                // Get values from controls
+               
                 double amount = double.Parse(amountTextBox.Text);
                 string sourceCurrency = sourceCurrencyComboBox.SelectedItem.ToString();
                 string destinationCurrency = destinationCurrencyComboBox.SelectedItem.ToString();
 
-                // Perform the conversion
+               
                 double convertedAmount = adminTranzactii.SchimbValutar(amount, sourceCurrency, destinationCurrency);
 
-                // Display the result
+               
                 resultLabel.Text = $"Rezultat: {amount} {sourceCurrency} = {convertedAmount:N2} {destinationCurrency}";
             }
             catch (Exception ex)

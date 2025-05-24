@@ -227,16 +227,11 @@ namespace ProiectBanca
                 cheltuieli = adminTranzactii.GetTranzactiiUtilizatorDupaTip(currentUser.Id, TipTranzactie.Cheltuiala)
                     .OrderByDescending(t => t.DataTranzactie)
                     .ToList();
-                ApplyFilters();
+                ActualizeazaListaCheltuieli(cheltuieli);
             }
         }
 
-        private void ApplyFilters()
-        {
-            List<Tranzactie> filteredCheltuieli = cheltuieli;
-           
-            ActualizeazaListaCheltuieli(filteredCheltuieli);
-        }
+       
 
         private void ActualizeazaListaCheltuieli(List<Tranzactie> listaCheltuieli)
         {
@@ -310,10 +305,9 @@ namespace ProiectBanca
                         editCheltuialaForm.dataPicker.Value = tranzactie.DataTranzactie;
                         editCheltuialaForm.saveButton.Text = "Salveaza";
 
-                        // Afișează formularul și verifică dacă a fost salvat
                         if (editCheltuialaForm.ShowDialog() == DialogResult.OK)
                         {
-                            // Validare și salvare după închiderea formularului
+                            
                             if (string.IsNullOrWhiteSpace(editCheltuialaForm.sumaTextBox.Text))
                             {
                                 MessageBox.Show("Va rugam sa introduceti o suma.", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -328,6 +322,7 @@ namespace ProiectBanca
 
                             Valuta valuta = (Valuta)editCheltuialaForm.valutaComboBox.SelectedItem;
                             DateTime data = editCheltuialaForm.dataPicker.Value;
+
 
                             Tranzactie tranzactieEditata = new Tranzactie(
                                 valuta,
@@ -351,11 +346,7 @@ namespace ProiectBanca
             string searchTerm = searchTextBox.Text.Trim().ToLower();
             string selectedField = searchFieldComboBox.SelectedItem.ToString();
 
-            if (string.IsNullOrEmpty(searchTerm))
-            {
-                ApplyFilters();
-                return;
-            }
+            
 
             var rezultateCautare = cheltuieli.Where(c =>
                 (selectedField == "ID" && c.Id.ToString().Contains(searchTerm)) ||
@@ -402,7 +393,7 @@ namespace ProiectBanca
 
         private void InitializeComponents()
         {
-            this.Text = "Adaugă Cheltuială Nouă";
+            this.Text = "Adaugă Cheltuiala Noua";
             this.Size = new Size(400, 300);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterParent;
